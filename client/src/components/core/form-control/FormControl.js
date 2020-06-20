@@ -8,6 +8,7 @@ const FormControl = ({
   placeholder,
   name,
   helper,
+  value,
   className,
 }) => (
   <div className={`form-control ${className}`}>
@@ -17,6 +18,7 @@ const FormControl = ({
       required={required}
       placeholder={placeholder}
       name={name}
+      defaultValue={value}
     />
     {helper && <span className="form-control__helper">{helper}</span>}
   </div>
@@ -28,6 +30,7 @@ FormControl.propTypes = {
   placeholder: PropTypes.string,
   name: PropTypes.string,
   helper: PropTypes.string,
+  value: PropTypes.string,
   className: PropTypes.string,
 }
 
@@ -36,6 +39,7 @@ FormControl.defaultTypes = {
   placeholder: '',
   name: '',
   helper: '',
+  value: '',
   className: '',
 }
 

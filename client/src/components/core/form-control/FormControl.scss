@@ -8,14 +8,15 @@
     width: 100%;
     margin: 0 auto;
     height: 3rem;
-    // border: 1px solid $color-divider;
-    border: none;
+    border: 1px solid #fff;
     border-radius: 10px;
     padding: 5px 20px;
     background-color: #efefef;
+    transition: all 0.3s ease-in;
 
     &:focus {
       outline: none;
+      border-color: $color-primary;
     }
   }
 
