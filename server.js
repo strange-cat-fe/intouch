@@ -1,7 +1,13 @@
 const mongoose = require('mongoose')
 const config = require('config')
+const bodyParser = require('body-parser')
 
 const app = require('express')()
+const jsonParser = bodyParser.json()
+
+app.use(jsonParser)
+
+app.use('/api/auth', require('./routes/auth.routes'))
 
 async function start() {
   try {

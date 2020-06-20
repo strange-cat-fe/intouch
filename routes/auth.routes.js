@@ -1,6 +1,6 @@
 const { Router } = require('express')
 const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoket')
+const jwt = require('jsonwebtoken')
 const config = require('config')
 
 const router = Router()
@@ -73,3 +73,5 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ data: e.message })
   }
 })
+
+module.exports = router
