@@ -1,0 +1,15 @@
+{
+  "short_name": "InTouch",
+  "name": "InTouch Web App",
+  "icons": [
+    {
+      "src": "logo.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#03a9f4",
+  "background_color": "#ffffff"
+}
