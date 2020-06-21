@@ -25,6 +25,7 @@ const post = new Schema({
     ],
     default: [],
   },
+  date: String,
 })
 
 module.exports = model('Post', post)
