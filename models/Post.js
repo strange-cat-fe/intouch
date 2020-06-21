@@ -12,7 +12,7 @@ const post = new Schema({
   author: {
     type: {
       username: String,
-      id: String,
+      _id: String,
     },
     required: true,
   },
@@ -20,7 +20,7 @@ const post = new Schema({
     type: [
       {
         username: String,
-        id: String,
+        _id: String,
       },
     ],
     default: [],
