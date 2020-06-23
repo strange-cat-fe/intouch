@@ -19,8 +19,8 @@ const post = new Schema({
   likes: {
     type: [
       {
-        username: String,
-        _id: String,
+        type: Schema.Types.ObjectId,
+        ref: 'User',
       },
     ],
     default: [],
