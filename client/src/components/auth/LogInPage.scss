@@ -1,0 +1,54 @@
+@import '../../scss/vars';
+
+.log-in {
+  margin: 4rem auto 0 auto;
+
+  &__heading {
+    &__img {
+      display: block;
+      width: 100px;
+      height: 100px;
+      margin: 0 auto;
+      margin-bottom: 1rem;
+    }
+  }
+
+  &__form {
+    &__input {
+      margin-bottom: 1rem;
+    }
+
+    &__btn {
+      margin: 0 auto;
+      margin-bottom: 1rem;
+      background-color: $color-primary;
+      color: #fff;
+
+      &:disabled {
+        background-color: $color-divider;
+      }
+    }
+
+    &__link {
+      display: block;
+      color: $color-primary;
+      text-decoration: none;
+      text-align: center;
+
+      &:active,
+      &:hover,
+      &:focus {
+        text-decoration: underline;
+        outline: none;
+      }
+    }
+  }
+
+  &__loading {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
