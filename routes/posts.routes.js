@@ -6,6 +6,12 @@ const Post = require('../models/Post')
 
 const router = Router()
 
+const mapLikes = likes => {
+  return likes.map(like => ({
+    _id: like._id,
+  }))
+}
+
 router.get('/', paginatedResults(Post), (req, res) => {
   try {
     res.status(200).json({ data: res.paginatedResults })
@@ -41,14 +47,22 @@ router.post('/:id/like', async (req, res) => {
     const isLiked = post.likes.some(like => like.equals(user._id))
     if (isLiked) {
       post.likes.pull(user._id)
-      res.status(200).json({ message: 'Disliked', likes: mapLikes(post.likes) })
+      res.status(200).json({
+        data: {
+          likes: mapLikes(post.likes),
+        },
+      })
     } else {
       post.likes.push(user)
-      res.status(200).json({ message: 'Liked', likes: mapLikes(post.likes) })
+      res.status(200).json({
+        data: {
+          likes: mapLikes(post.likes),
+        },
+      })
     }
     await post.save()
   } catch (e) {
-    res.status(500).json(e.message)
+    res.status(500).json({ data: e.message })
   }
 })
 
