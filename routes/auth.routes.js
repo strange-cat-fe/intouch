@@ -1,6 +1,7 @@
 const { Router } = require('express')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const crypto = require('crypto')
 const config = require('config')
 const sendgrid = require('@sendgrid/mail')
 
@@ -29,7 +30,13 @@ router.post('/signup', async (req, res) => {
         password: hashedPassword,
       })
 
-      await sendgrid.send(regEmail(email))
+      crypto.randomBytes(32, async (err, buffer) => {
+        if (err) throw err
+
+        const key = buffer.toString('hex')
+        await sendgrid.send(regEmail(email, key))
+      })
+
       res.status(200).json({
         data: 'Please, verify your e-mail',
       })
