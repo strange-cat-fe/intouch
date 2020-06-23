@@ -2,10 +2,14 @@ const { Router } = require('express')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const config = require('config')
+const sendgrid = require('@sendgrid/mail')
 
 const router = Router()
 
 const User = require('../models/User')
+const regEmail = require('../email/registration')
+
+sendgrid.setApiKey(config.get('sendgridApi'))
 
 router.post('/signup', async (req, res) => {
   try {
@@ -24,8 +28,10 @@ router.post('/signup', async (req, res) => {
         email,
         password: hashedPassword,
       })
+
+      await sendgrid.send(regEmail(email))
       res.status(200).json({
-        data: 'User created',
+        data: 'Please, verify your e-mail',
       })
     }
   } catch (e) {
@@ -41,7 +47,7 @@ router.post('/login', async (req, res) => {
     const { email, password } = req.body
     const candidate = await User.findOne({ email })
 
-    if (candidate) {
+    if (candidate.verified) {
       const areSame = await bcrypt.compare(password, candidate.password)
 
       if (areSame) {
@@ -71,6 +77,21 @@ router.post('/login', async (req, res) => {
         error: true,
       })
     }
+  } catch (e) {
+    res.status(500).json({ data: e.message })
+  }
+})
+
+router.get('/verify/:email', async (req, res) => {
+  try {
+    const email = req.params.email
+    const user = await User.findOne({ email })
+
+    user.verified = true
+    await user.save()
+    res.send(`
+  <h1>Your email is verified!</h1>
+  `)
   } catch (e) {
     res.status(500).json({ data: e.message })
   }
