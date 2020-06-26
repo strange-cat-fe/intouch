@@ -14,7 +14,7 @@ module.exports = function (email, verifyKey) {
       </p>
       <a href="${config.get(
         'baseUrl',
-      )}/api/auth/verify/${email}/veryfyKey=${verifyKey}">Verify Email</a>
+      )}/api/auth/verify/${email}/${verifyKey}">Verify Email</a>
       <hr />
       `,
     }

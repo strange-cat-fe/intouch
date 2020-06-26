@@ -1,7 +1,7 @@
 const { Router } = require('express')
+const crypto = require('crypto')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-const crypto = require('crypto')
 const config = require('config')
 const sendgrid = require('@sendgrid/mail')
 
@@ -24,17 +24,19 @@ router.post('/signup', async (req, res) => {
     } else {
       const hashedPassword = await bcrypt.hash(password, 10)
 
-      await User.create({
-        username,
-        email,
-        password: hashedPassword,
-      })
-
       crypto.randomBytes(32, async (err, buffer) => {
         if (err) throw err
 
         const key = buffer.toString('hex')
+
         await sendgrid.send(regEmail(email, key))
+
+        await User.create({
+          username,
+          email,
+          password: hashedPassword,
+          verifyKey: key,
+        })
       })
 
       res.status(200).json({
@@ -89,16 +91,23 @@ router.post('/login', async (req, res) => {
   }
 })
 
-router.get('/verify/:email', async (req, res) => {
+router.get('/verify/:email/:verifyKey', async (req, res) => {
   try {
     const email = req.params.email
     const user = await User.findOne({ email })
 
-    user.verified = true
-    await user.save()
-    res.send(`
+    if (req.params.verifyKey == user.verifyKey) {
+      user.verified = true
+
+      await User.findByIdAndUpdate(user._id, { $unset: { verifyKey: '' } })
+
+      await user.save()
+      res.send(`
   <h1>Your email is verified!</h1>
   `)
+    } else {
+      res.status(404).json({ data: 'Bad request' })
+    }
   } catch (e) {
     res.status(500).json({ data: e.message })
   }
