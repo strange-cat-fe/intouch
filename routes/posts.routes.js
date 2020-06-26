@@ -7,9 +7,9 @@ const Post = require('../models/Post')
 const router = Router()
 
 const mapLikes = likes => {
-  return likes.map(like => ({
-    _id: like._id,
-  }))
+  return likes.map(like => {
+    return like._id
+  })
 }
 
 router.get('/', paginatedResults(Post), (req, res) => {
