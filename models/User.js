@@ -17,10 +17,6 @@ const user = new Schema({
     type: Boolean,
     dafault: false,
   },
-  verifyKey: {
-    type: String,
-    default: '',
-  },
 })
 
 module.exports = model('User', user)

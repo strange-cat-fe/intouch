@@ -8,6 +8,7 @@ const sendgrid = require('@sendgrid/mail')
 const router = Router()
 
 const User = require('../models/User')
+const UVUser = require('../models/UVUser')
 const regEmail = require('../email/registration')
 
 sendgrid.setApiKey(config.get('sendgridApi'))
@@ -31,16 +32,15 @@ router.post('/signup', async (req, res) => {
 
         await sendgrid.send(regEmail(email, key))
 
-        await User.create({
+        await UVUser.create({
           username,
           email,
           password: hashedPassword,
           verifyKey: key,
         })
       })
-
       res.status(200).json({
-        data: 'Please, verify your e-mail',
+        data: 'Please, verify your e-mail in one hour',
       })
     }
   } catch (e) {
@@ -56,7 +56,7 @@ router.post('/login', async (req, res) => {
     const { email, password } = req.body
     const candidate = await User.findOne({ email })
 
-    if (candidate.verified) {
+    if (candidate) {
       const areSame = await bcrypt.compare(password, candidate.password)
 
       if (areSame) {
@@ -94,19 +94,25 @@ router.post('/login', async (req, res) => {
 router.get('/verify/:email/:verifyKey', async (req, res) => {
   try {
     const email = req.params.email
-    const user = await User.findOne({ email })
+    const candidate = await UVUser.findOne({
+      email,
+    })
+    if (candidate) {
+      if (req.params.verifyKey == candidate.verifyKey) {
+        const user = new User({
+          username: candidate.username,
+          email,
+          password: candidate.password,
+        })
+        await UVUser.findByIdAndDelete(candidate._id)
 
-    if (req.params.verifyKey == user.verifyKey) {
-      user.verified = true
-
-      await User.findByIdAndUpdate(user._id, { $unset: { verifyKey: '' } })
-
-      await user.save()
-      res.send(`
-  <h1>Your email is verified!</h1>
-  `)
+        await user.save()
+        res.send(`<h1>Your email is verified!</h1>`)
+      } else {
+        res.status(404).json({ data: 'Bad request' })
+      }
     } else {
-      res.status(404).json({ data: 'Bad request' })
+      res.send(`<h1>Token expired, retry the verification<h1>`)
     }
   } catch (e) {
     res.status(500).json({ data: e.message })
