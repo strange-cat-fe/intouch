@@ -1,0 +1,7 @@
+export const UPDATE_SIGNUP_FORM: string = 'UPDATE-SIGNUP-FORM'
+export const UPDATE_LOGIN_FORM: string = 'UPDATE-LOGIN-FORM'
+export const SET_LOADING: string = 'SET-LOADING'
+export const SET_ERROR: string = 'SET-ERROR'
+export const SIGNUP: string = 'SIGNUP'
+export const LOGIN: string = 'LOGIN'
+export const SET_USER: string = 'SET-USER'
