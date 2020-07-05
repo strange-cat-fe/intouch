@@ -21,6 +21,5 @@ const uVUser = new Schema(
   },
   { timestamps: true },
 )
-
-uVUser.index({ createdAt: 1 }, { expires: '1h' })
+uVUser.index({ createdAt: 1 }, { expires: '48h' })
 module.exports = model('UVUser', uVUser)

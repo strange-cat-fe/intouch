@@ -60,19 +60,18 @@ router.post('/login', async (req, res) => {
       const areSame = await bcrypt.compare(password, candidate.password)
 
       if (areSame) {
-        const token = jwt.sign(
-          { userId: candidate._id },
+        const refreshToken = jwt.sign(
+          {
+            email: candidate.email,
+            password: candidate.password,
+          },
           config.get('jwtSecret'),
           {
-            expiresIn: '1h',
+            expiresIn: '30d',
           },
         )
         return res.status(200).json({
-          data: {
-            token,
-            userId: candidate._id,
-            username: candidate.username,
-          },
+          data: refreshToken,
         })
       } else {
         return res.status(200).json({
@@ -113,6 +112,51 @@ router.get('/verify/:email/:verifyKey', async (req, res) => {
       }
     } else {
       res.send(`<h1>Token expired, retry the verification<h1>`)
+    }
+  } catch (e) {
+    res.status(500).json({ data: e.message })
+  }
+})
+
+router.post('/accessToken', async (req, res) => {
+  try {
+    const decodedRefreshToken = jwt.verify(
+      req.body.refreshToken,
+      config.get('jwtSecret'),
+    )
+
+    if (decodedRefreshToken) {
+      const user = await User.findOne({
+        email: decodedRefreshToken.email,
+        password: decodedRefreshToken.password,
+      })
+
+      if (user) {
+        const accessToken = jwt.sign(
+          {
+            userId: user._id,
+            username: user.username,
+          },
+          config.get('jwtSecret'),
+          {
+            expiresIn: '2d',
+          },
+        )
+
+        return res.status(200).json({
+          data: accessToken,
+        })
+      } else {
+        res.status(200).json({
+          err: true,
+          data: 'Wrong refresh token',
+        })
+      }
+    } else {
+      res.status(200).json({
+        err: true,
+        data: "Refresh token doesn't exist",
+      })
     }
   } catch (e) {
     res.status(500).json({ data: e.message })
