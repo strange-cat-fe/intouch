@@ -142,9 +142,22 @@ router.post('/accessToken', async (req, res) => {
             expiresIn: '2d',
           },
         )
+        const refreshToken = jwt.sign(
+          {
+            email: user.email,
+            password: user.password,
+          },
+          config.get('jwtSecret'),
+          {
+            expiresIn: '30d',
+          },
+        )
 
         return res.status(200).json({
-          data: accessToken,
+          data: {
+            accessToken,
+            refreshToken,
+          },
         })
       } else {
         res.status(200).json({
