@@ -3,6 +3,11 @@
   "dbUri": "mongodb+srv://danila:19283746@cluster0-jati1.mongodb.net/intouch",
   "jwtSecret": "lk5-_e8uh+889Y_H=JK0hbvu5FYTF78hjg",
   "baseUrl": "http://localhost:5000",
+
   "sendgridEmail": "intouchappmail@gmail.com",
-  "sendgridApi": "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"
+  "sendgridApi": "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",
+
+  "cloud_name": "strangecatfe",
+  "cloud_api_key": 362437742733351,
+  "cloud_api_secret": "QwCTfDa-3IYUnXA5QOFtEUhf7zc"
 }

@@ -4,3 +4,4 @@ client/build
 
 # Server
 node_modules
+tmp
