@@ -11,6 +11,7 @@ import {
   SET_ERROR,
   UPDATE_LOGIN_FORM,
   SET_USER,
+  LOGIN,
 } from '../constants/auth'
 import { ThunkAction } from 'redux-thunk'
 import { AppState } from '../store'
@@ -139,7 +140,12 @@ export const login = (): ThunkAction<
   } else {
     const date = new Date()
     date.setMonth(date.getMonth() + 1)
-    document.cookie = `refreshToken=${result.data};expires=${date};`
+    document.cookie = `refreshToken=${result.data};expires=${date};samesite=strict;`
+    dispatch({
+      type: LOGIN,
+    })
+    dispatch(setUser())
+    dispatch(setLoading(false))
   }
 }
 
@@ -152,23 +158,45 @@ export const setUser = (): ThunkAction<
   dispatch(setLoading(true))
 
   const refreshToken = document.cookie.match('(^|;) ?refreshToken=([^;]*)(;|$)')
+  console.log(typeof refreshToken![2])
 
   if (refreshToken) {
-    const response = await fetch('/auth/accessToken', {
+    const response = await fetch('http://localhost:5000/api/auth/accessToken', {
       method: 'POST',
-      body: unescape(refreshToken[2]),
+      body: JSON.stringify({ refreshToken: unescape(refreshToken[2]) }),
       headers: {
         'Content-Type': 'application/json',
       },
     })
     const result = await response.json()
 
-    dispatch({
-      type: SET_USER,
-      payload: jwt_decode(result.data),
-    })
+    if (result.error) {
+      dispatch({
+        type: SET_USER,
+        payload: null,
+      })
+      dispatch(setLoading(false))
+    } else {
+      const date = new Date()
+      date.setTime(date.getTime() - 1)
+      document.cookie = 'refreshToken=;expires=' + date
 
-    dispatch(setLoading(false))
+      const newDate = new Date()
+      date.setMonth(date.getMonth() + 1)
+      document.cookie = `refreshToken=${result.data.refreshToken};expires=${newDate};samesite=strict;`
+
+      sessionStorage.setItem(
+        'accessToken',
+        JSON.stringify(result.data.accessToken),
+      )
+
+      dispatch({
+        type: SET_USER,
+        payload: jwt_decode(result.data.accessToken),
+      })
+
+      dispatch(setLoading(false))
+    }
   } else {
     dispatch({
       type: SET_USER,
