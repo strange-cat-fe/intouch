@@ -15,6 +15,7 @@ sendgrid.setApiKey(config.get('sendgridApi'))
 
 router.post('/signup', async (req, res) => {
   try {
+    console.log(req.body)
     const { username, email, password } = req.body
     const candidate = await User.findOne({ email })
     if (candidate) {
@@ -45,8 +46,7 @@ router.post('/signup', async (req, res) => {
     }
   } catch (e) {
     res.status(500).json({
-      error: true,
-      data: e.message,
+      data: e,
     })
   }
 })
@@ -86,7 +86,7 @@ router.post('/login', async (req, res) => {
       })
     }
   } catch (e) {
-    res.status(500).json({ data: e.message })
+    res.status(500).json({ data: e })
   }
 })
 
@@ -114,7 +114,7 @@ router.get('/verify/:email/:verifyKey', async (req, res) => {
       res.send(`<h1>Token expired, retry the verification<h1>`)
     }
   } catch (e) {
-    res.status(500).json({ data: e.message })
+    res.status(500).json({ data: e })
   }
 })
 
