@@ -1,8 +1,13 @@
 import { connect } from 'react-redux'
 import Login from '../../../components/auth/login/Login'
-import { UpdateLoginFormAction } from '../../../types/auth'
+import { SetErrorAction, DeleteSuccessMessageAction } from '../../../types/auth'
 import { AppState } from '../../../store'
-import { updateLoginForm, login } from '../../../actions/auth'
+import {
+  updateLoginForm,
+  login,
+  setError,
+  deleteSuccessMessage,
+} from '../../../actions/auth'
 import { ThunkAction } from 'redux-thunk'
 import { Action } from 'redux'
 
@@ -21,8 +26,10 @@ interface LinkDispatchToProps {
   updateLoginForm: (form: {
     email: string
     password: string
-  }) => UpdateLoginFormAction
+  }) => ThunkAction<void, AppState, unknown, Action<string>>
   login: () => ThunkAction<void, AppState, unknown, Action<string>>
+  setError: (error: string | null) => SetErrorAction
+  deleteSuccessMessage: () => DeleteSuccessMessageAction
 }
 
 const mapStateToProps = (state: AppState): LinkStateToProps => {
@@ -37,6 +44,8 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 const mapDispatchToProps: LinkDispatchToProps = {
   updateLoginForm,
   login,
+  setError,
+  deleteSuccessMessage,
 }
 
 // TODO: fix typecheking error

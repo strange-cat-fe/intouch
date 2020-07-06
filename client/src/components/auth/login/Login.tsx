@@ -11,7 +11,7 @@ import {
   Button,
   Link,
 } from '@chakra-ui/core'
-import { UpdateLoginFormAction } from '../../../types/auth'
+import { SetErrorAction, DeleteSuccessMessageAction } from '../../../types/auth'
 import { ThunkAction } from 'redux-thunk'
 import { AppState } from '../../../store'
 import { Action } from 'redux'
@@ -29,8 +29,10 @@ interface LoginProps extends RouteComponentProps {
   updateLoginForm: (form: {
     email: string
     password: string
-  }) => UpdateLoginFormAction
+  }) => ThunkAction<void, AppState, unknown, Action<string>>
   login: () => ThunkAction<void, AppState, unknown, Action<string>>
+  setError: (error: string | null) => SetErrorAction
+  deleteSuccessMessage: () => DeleteSuccessMessageAction
 }
 
 const Login: React.FC<LoginProps> = ({
@@ -40,6 +42,8 @@ const Login: React.FC<LoginProps> = ({
   success,
   updateLoginForm,
   login,
+  setError,
+  deleteSuccessMessage,
   history,
 }) =>
   loading ? (
@@ -110,6 +114,8 @@ const Login: React.FC<LoginProps> = ({
           className={classes.link}
           onClick={(e: React.FormEvent<HTMLAnchorElement>) => {
             e.preventDefault()
+            setError(null)
+            deleteSuccessMessage()
             history.push('/auth/signup')
           }}
         >

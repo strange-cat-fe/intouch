@@ -16,6 +16,7 @@ import {
   UPDATE_LOGIN_FORM,
   LOGIN,
   SET_USER,
+  DELETE_SUCCESS_MESSAGE,
 } from '../constants/auth'
 
 const iniitalState: AuthState = {
@@ -55,6 +56,8 @@ export default (state = iniitalState, action: AuthActions): AuthState => {
       return state
     case SET_USER:
       return { ...state, user: (action as SetUserAction).payload }
+    case DELETE_SUCCESS_MESSAGE:
+      return { ...state, signup: { ...state.signup, success: null } }
     default:
       return state
   }

@@ -12,11 +12,11 @@ import {
   AlertIcon,
   Link,
 } from '@chakra-ui/core'
-import { UpdateSignUpFormAction } from '../../../types/auth'
+import { SetErrorAction } from '../../../types/auth'
 import { ThunkAction } from 'redux-thunk'
 import { AppState } from '../../../store'
 import { Action } from 'redux'
-import { withRouter, RouteComponentProps } from 'react-router-dom'
+import { withRouter, RouteComponentProps, Redirect } from 'react-router-dom'
 
 interface SignUpProps extends RouteComponentProps {
   form: {
@@ -33,8 +33,9 @@ interface SignUpProps extends RouteComponentProps {
     username: string
     password: string
     valid: boolean
-  }) => UpdateSignUpFormAction
+  }) => ThunkAction<void, AppState, unknown, Action<string>>
   signUp: () => ThunkAction<void, AppState, unknown, Action<string>>
+  setError: (error: string | null) => SetErrorAction
 }
 
 const SignUp: React.FC<SignUpProps> = ({
@@ -43,6 +44,7 @@ const SignUp: React.FC<SignUpProps> = ({
   error,
   updateSignUpForm,
   signUp,
+  setError,
   history,
 }) =>
   loading ? (
@@ -128,12 +130,14 @@ const SignUp: React.FC<SignUpProps> = ({
           className={classes.link}
           onClick={(e: React.FormEvent<HTMLAnchorElement>) => {
             e.preventDefault()
+            setError(null)
             history.push('/auth/login')
           }}
         >
           Already have an account?
         </Link>
       </SimpleGrid>
+      {form.success && <Redirect to="/auth/login" />}
     </form>
   )
 

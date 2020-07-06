@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import SignUp from '../../../components/auth/signup/SignUp'
-import { updateSignUpForm, signUp } from '../../../actions/auth'
-import { UpdateSignUpFormAction } from '../../../types/auth'
+import { updateSignUpForm, signUp, setError } from '../../../actions/auth'
+import { SetErrorAction } from '../../../types/auth'
 import { AppState } from '../../../store'
 import { ThunkAction } from 'redux-thunk'
 import { Action } from 'redux'
@@ -24,8 +24,9 @@ interface LinkDispatchToProps {
     username: string
     password: string
     valid: boolean
-  }) => UpdateSignUpFormAction
+  }) => ThunkAction<void, AppState, unknown, Action<string>>
   signUp: () => ThunkAction<void, AppState, unknown, Action<string>>
+  setError: (error: string | null) => SetErrorAction
 }
 
 const mapStateToProps = (state: AppState): LinkStateToProps => {
@@ -39,6 +40,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
 const mapDispatchToProps: LinkDispatchToProps = {
   updateSignUpForm,
   signUp,
+  setError,
 }
 
 // TODO: fix typechecking error

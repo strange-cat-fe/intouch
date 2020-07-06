@@ -6,6 +6,7 @@ import {
   UPDATE_LOGIN_FORM,
   LOGIN,
   SET_USER,
+  DELETE_SUCCESS_MESSAGE,
 } from '../constants/auth'
 
 export interface AuthState {
@@ -51,6 +52,10 @@ export interface SetLoadingAction {
   payload: boolean
 }
 
+export interface DeleteSuccessMessageAction {
+  type: typeof DELETE_SUCCESS_MESSAGE
+}
+
 export interface SetErrorAction {
   type: typeof SET_ERROR
   payload: string | null
@@ -80,3 +85,4 @@ export type AuthActions =
   | UpdateLoginFormAction
   | LoginAction
   | SetUserAction
+  | DeleteSuccessMessageAction

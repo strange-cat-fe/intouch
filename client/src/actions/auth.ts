@@ -1,8 +1,7 @@
 import {
-  UpdateSignUpFormAction,
   SetLoadingAction,
   SetErrorAction,
-  UpdateLoginFormAction,
+  DeleteSuccessMessageAction,
 } from '../types/auth'
 import {
   UPDATE_SIGNUP_FORM,
@@ -12,6 +11,7 @@ import {
   UPDATE_LOGIN_FORM,
   SET_USER,
   LOGIN,
+  DELETE_SUCCESS_MESSAGE,
 } from '../constants/auth'
 import { ThunkAction } from 'redux-thunk'
 import { AppState } from '../store'
@@ -22,8 +22,13 @@ export const updateSignUpForm = (form: {
   email: string
   username: string
   password: string
-}): UpdateSignUpFormAction => {
-  return {
+}): ThunkAction<void, AppState, unknown, Action<string>> => (
+  dispatch,
+  getState,
+) => {
+  getState().auth.error && dispatch(setError(null))
+
+  dispatch({
     type: UPDATE_SIGNUP_FORM,
     payload: {
       ...form,
@@ -33,7 +38,7 @@ export const updateSignUpForm = (form: {
         form.password.length > 7,
       success: null,
     },
-  }
+  })
 }
 
 export const setLoading = (loading: boolean): SetLoadingAction => {
@@ -71,13 +76,13 @@ export const signUp = (): ThunkAction<
   const result = await response.json()
 
   if (result.error) {
-    dispatch(setError(result.data))
     dispatch(
       updateSignUpForm({
         ...getState().auth.signup,
         password: '',
       }),
     )
+    dispatch(setError(result.data))
     dispatch(setLoading(false))
   } else {
     dispatch(
@@ -98,14 +103,20 @@ export const signUp = (): ThunkAction<
 export const updateLoginForm = (form: {
   email: string
   password: string
-}): UpdateLoginFormAction => {
-  return {
+}): ThunkAction<void, AppState, unknown, Action<string>> => (
+  dispatch,
+  getState,
+) => {
+  getState().auth.error && dispatch(setError(null))
+  getState().auth.signup.success && dispatch(deleteSuccessMessage())
+
+  dispatch({
     type: UPDATE_LOGIN_FORM,
     payload: {
       ...form,
       valid: form.email.length > 0 && form.password.length > 7,
     },
-  }
+  })
 }
 
 export const login = (): ThunkAction<
@@ -129,18 +140,24 @@ export const login = (): ThunkAction<
   const result = await response.json()
 
   if (result.error) {
-    dispatch(setError(result.data))
     dispatch(
       updateLoginForm({
         ...getState().auth.login,
         password: '',
       }),
     )
+    dispatch(setError(result.data))
     dispatch(setLoading(false))
   } else {
+    dispatch(
+      updateLoginForm({
+        email: '',
+        password: '',
+      }),
+    )
     const date = new Date()
     date.setMonth(date.getMonth() + 1)
-    document.cookie = `refreshToken=${result.data};expires=${date};samesite=strict;`
+    document.cookie = `refreshToken=${result.data};expires=${date};samesite=strict;path=/auth;`
     dispatch({
       type: LOGIN,
     })
@@ -158,7 +175,6 @@ export const setUser = (): ThunkAction<
   dispatch(setLoading(true))
 
   const refreshToken = document.cookie.match('(^|;) ?refreshToken=([^;]*)(;|$)')
-  console.log(typeof refreshToken![2])
 
   if (refreshToken) {
     const response = await fetch('http://localhost:5000/api/auth/accessToken', {
@@ -182,8 +198,8 @@ export const setUser = (): ThunkAction<
       document.cookie = 'refreshToken=;expires=' + date
 
       const newDate = new Date()
-      date.setMonth(date.getMonth() + 1)
-      document.cookie = `refreshToken=${result.data.refreshToken};expires=${newDate};samesite=strict;`
+      newDate.setMonth(newDate.getMonth() + 1)
+      document.cookie = `refreshToken=${result.data.refreshToken};expires=${newDate};samesite=strict;path=/auth;`
 
       sessionStorage.setItem(
         'accessToken',
@@ -203,5 +219,11 @@ export const setUser = (): ThunkAction<
       payload: null,
     })
     dispatch(setLoading(false))
+  }
+}
+
+export const deleteSuccessMessage = (): DeleteSuccessMessageAction => {
+  return {
+    type: DELETE_SUCCESS_MESSAGE,
   }
 }
