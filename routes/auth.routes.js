@@ -120,8 +120,9 @@ router.get('/verify/:email/:verifyKey', async (req, res) => {
 
 router.post('/accessToken', async (req, res) => {
   try {
+    const refreshToken = req.body.refreshToken
     const decodedRefreshToken = jwt.verify(
-      req.body.refreshToken,
+      refreshToken,
       config.get('jwtSecret'),
     )
 
