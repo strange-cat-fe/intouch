@@ -7,7 +7,7 @@ import { ThemeProvider, theme, CSSReset } from '@chakra-ui/core'
 import { Provider } from 'react-redux'
 import store from './store'
 
-ReactDOM.render(
+ReactDOM.hydrate(
   <React.StrictMode>
     <Provider store={store}>
       <ThemeProvider theme={theme}>
