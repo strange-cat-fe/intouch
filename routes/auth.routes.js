@@ -15,6 +15,7 @@ sendgrid.setApiKey(config.get('sendgridApi'))
 
 router.post('/signup', async (req, res) => {
   try {
+    console.log(req.body)
     const { username, email, password } = req.body
     const candidate = await User.findOne({ email })
     if (candidate) {

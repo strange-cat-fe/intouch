@@ -60,9 +60,12 @@ export const signUp = (): ThunkAction<
 
   const { email, username, password } = getState().auth.signup
 
-  const response = await fetch('/auth/signup', {
+  const response = await fetch('http://localhost:5000/api/auth/signup', {
     method: 'POST',
     body: JSON.stringify({ email, username, password }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
   })
   const result = await response.json()
 
@@ -115,9 +118,12 @@ export const login = (): ThunkAction<
 
   const { email, password } = getState().auth.login
 
-  const response = await fetch('/auth/login', {
+  const response = await fetch('http://localhost:5000/api/auth/login', {
     method: 'POST',
     body: JSON.stringify({ email, password }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
   })
   const result = await response.json()
 
@@ -151,6 +157,9 @@ export const setUser = (): ThunkAction<
     const response = await fetch('/auth/accessToken', {
       method: 'POST',
       body: unescape(refreshToken[2]),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     })
     const result = await response.json()
 
