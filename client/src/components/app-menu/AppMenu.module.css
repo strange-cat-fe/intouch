@@ -1,0 +1,25 @@
+.menu {
+  background-color: #fff;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.link:focus {
+  outline: none;
+}
+
+.active {
+  color: #4299e1;
+}
