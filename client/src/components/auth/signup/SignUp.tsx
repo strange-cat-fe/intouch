@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import classes from './SignUp.module.css'
 import logo from '../../../logo.png'
 import {
@@ -8,9 +8,8 @@ import {
   Button,
   SimpleGrid,
   Spinner,
-  Alert,
-  AlertIcon,
   Link,
+  useToast,
 } from '@chakra-ui/core'
 import { SetErrorAction } from '../../../types/auth'
 import { ThunkAction } from 'redux-thunk'
@@ -46,18 +45,37 @@ const SignUp: React.FC<SignUpProps> = ({
   signUp,
   setError,
   history,
-}) =>
-  loading ? (
-    <div className={classes.loader}>
-      <Spinner
-        color="blue.400"
-        thickness="4px"
-        speed="0.5s"
-        emptyColor="gray.200"
-        size="xl"
-      />
-    </div>
-  ) : (
+}) => {
+  const toast = useToast()
+
+  useEffect((): any => {
+    error &&
+      toast({
+        title: 'Error',
+        description: error,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        onClose: () => setError(null),
+      })
+
+    return () => setError(null)
+  }, [error])
+
+  if (loading) {
+    return (
+      <div className={classes.loader}>
+        <Spinner
+          color="blue.400"
+          thickness="4px"
+          speed="0.5s"
+          emptyColor="gray.200"
+          size="xl"
+        />
+      </div>
+    )
+  }
+  return (
     <form
       className={classes.form}
       onChange={e =>
@@ -73,12 +91,6 @@ const SignUp: React.FC<SignUpProps> = ({
     >
       <SimpleGrid columns={1} spacing="1rem">
         <img className={classes.img} src={logo} alt="InTouch Logo" />
-        {error && (
-          <Alert status="error">
-            <AlertIcon />
-            {error}
-          </Alert>
-        )}
         <FormControl>
           <Input
             name="email"
@@ -140,5 +152,5 @@ const SignUp: React.FC<SignUpProps> = ({
       {form.success && <Redirect to="/auth/login" />}
     </form>
   )
-
+}
 export default withRouter(SignUp)

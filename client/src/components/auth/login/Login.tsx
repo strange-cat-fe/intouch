@@ -1,15 +1,14 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import classes from './Login.module.css'
 import logo from '../../../logo.png'
 import {
   Spinner,
   SimpleGrid,
-  Alert,
-  AlertIcon,
   FormControl,
   Input,
   Button,
   Link,
+  useToast,
 } from '@chakra-ui/core'
 import { SetErrorAction, DeleteSuccessMessageAction } from '../../../types/auth'
 import { ThunkAction } from 'redux-thunk'
@@ -45,18 +44,49 @@ const Login: React.FC<LoginProps> = ({
   setError,
   deleteSuccessMessage,
   history,
-}) =>
-  loading ? (
-    <div className={classes.loader}>
-      <Spinner
-        color="blue.400"
-        thickness="4px"
-        speed="0.5s"
-        emptyColor="gray.200"
-        size="xl"
-      />
-    </div>
-  ) : (
+}) => {
+  const toast = useToast()
+
+  useEffect((): any => {
+    error &&
+      toast({
+        title: 'Error',
+        description: error,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        onClose: () => setError(null),
+      })
+
+    success &&
+      toast({
+        title: 'Account created',
+        description: success,
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      })
+
+    return () => {
+      setError(null)
+      deleteSuccessMessage()
+    }
+  }, [error, success])
+
+  if (loading) {
+    return (
+      <div className={classes.loader}>
+        <Spinner
+          color="blue.400"
+          thickness="4px"
+          speed="0.5s"
+          emptyColor="gray.200"
+          size="xl"
+        />
+      </div>
+    )
+  }
+  return (
     <form
       className={classes.form}
       onChange={e =>
@@ -72,18 +102,6 @@ const Login: React.FC<LoginProps> = ({
     >
       <SimpleGrid columns={1} spacing="1rem">
         <img className={classes.img} src={logo} alt="InTouch Logo" />
-        {error && (
-          <Alert status="error">
-            <AlertIcon />
-            {error}
-          </Alert>
-        )}
-        {success && (
-          <Alert status="success">
-            <AlertIcon />
-            {success}
-          </Alert>
-        )}
         <FormControl>
           <Input
             name="email"
@@ -124,5 +142,5 @@ const Login: React.FC<LoginProps> = ({
       </SimpleGrid>
     </form>
   )
-
+}
 export default withRouter(Login)
