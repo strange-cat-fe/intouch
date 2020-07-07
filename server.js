@@ -14,6 +14,8 @@ app.use(function (req, res, next) {
   next()
 })
 
+app.use(require('./middleware/checkToken'))
+
 app.use(jsonParser)
 
 app.use('/api/auth', require('./routes/auth.routes'))
