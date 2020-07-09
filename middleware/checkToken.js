@@ -6,7 +6,8 @@ module.exports = async (req, res, next) => {
   try {
     if (
       req.originalUrl === '/api/auth/login' ||
-      req.originalUrl === '/api/auth/signup'
+      req.originalUrl === '/api/auth/signup' ||
+      req.originalUrl === '/api/auth/accessToken'
     )
       return next()
 
