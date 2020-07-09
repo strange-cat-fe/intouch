@@ -15,7 +15,6 @@ sendgrid.setApiKey(config.get('sendgridApi'))
 
 router.post('/signup', async (req, res) => {
   try {
-    console.log(req.body)
     const { username, email, password } = req.body
     const candidate = await User.findOne({ email })
     if (candidate) {
@@ -119,12 +118,9 @@ router.get('/verify/:email/:verifyKey', async (req, res) => {
 })
 
 router.post('/accessToken', async (req, res) => {
-  console.log(req.body)
-
   try {
-    const refreshToken = req.body.refreshToken
     const decodedRefreshToken = jwt.verify(
-      refreshToken,
+      req.body.refreshToken,
       config.get('jwtSecret'),
     )
 
