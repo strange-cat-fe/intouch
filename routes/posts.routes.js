@@ -42,23 +42,15 @@ router.post('/new', async (req, res) => {
 router.post('/:id/like', async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)
-    const user = await User.findById(req.body.userId)
+    const user = res.user
 
     const isLiked = post.likes.some(like => like.equals(user._id))
     if (isLiked) {
       post.likes.pull(user._id)
-      res.status(200).json({
-        data: {
-          likes: mapLikes(post.likes),
-        },
-      })
+      res.status(200)
     } else {
       post.likes.push(user)
-      res.status(200).json({
-        data: {
-          likes: mapLikes(post.likes),
-        },
-      })
+      res.status(200)
     }
     await post.save()
   } catch (e) {

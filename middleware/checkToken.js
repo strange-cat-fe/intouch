@@ -11,7 +11,10 @@ module.exports = async (req, res, next) => {
       const decodedToken = jwt.verify(token, config.get('jwtSecret'))
 
       const user = await User.findById(decodedToken.userId)
-      if (user) return next()
+      if (user) {
+        res.user = user
+        return next()
+      }
     }
     res.status(404).json({ data: 'Bad request' })
   } catch (e) {
