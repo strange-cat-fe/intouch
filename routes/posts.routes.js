@@ -39,7 +39,7 @@ router.post('/new', async (req, res) => {
   }
 })
 
-router.post('/:id/like', async (req, res) => {
+router.get('/:id/like', async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)
     const user = res.user
