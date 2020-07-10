@@ -6,12 +6,6 @@ const Post = require('../models/Post')
 
 const router = Router()
 
-const mapLikes = likes => {
-  return likes.map(like => {
-    return like._id
-  })
-}
-
 router.get('/', paginatedResults(Post), (req, res) => {
   try {
     res.status(200).json({ data: res.paginatedResults })
@@ -23,13 +17,13 @@ router.get('/', paginatedResults(Post), (req, res) => {
 router.post('/new', async (req, res) => {
   try {
     const { text, date, img } = req.body
-    const { username } = await User.findById(req.body.userId)
+    const { username } = res.user
 
     const newPost = new Post({
       text,
       date,
       img,
-      author: { username, _id: req.body.userId },
+      author: { username, _id: res.user._id },
     })
 
     await newPost.save()
