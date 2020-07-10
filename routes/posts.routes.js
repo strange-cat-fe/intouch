@@ -47,10 +47,10 @@ router.post('/:id/like', async (req, res) => {
     const isLiked = post.likes.some(like => like.equals(user._id))
     if (isLiked) {
       post.likes.pull(user._id)
-      res.status(202)
+      res.status(200)
     } else {
       post.likes.push(user)
-      res.status(202)
+      res.status(200)
     }
     await post.save()
   } catch (e) {
