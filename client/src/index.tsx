@@ -1,18 +1,18 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
-import App from './components/app/App'
 import * as serviceWorker from './serviceWorker'
 import { ThemeProvider, theme, CSSReset } from '@chakra-ui/core'
 import { Provider } from 'react-redux'
 import store from './store'
+import AppContainer from './containers/app/AppContainer'
 
-ReactDOM.hydrate(
+ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <CSSReset />
-        <App />
+        <AppContainer />
       </ThemeProvider>
     </Provider>
   </React.StrictMode>,

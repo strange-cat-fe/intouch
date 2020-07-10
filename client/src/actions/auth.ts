@@ -157,7 +157,7 @@ export const login = (): ThunkAction<
     )
     const date = new Date()
     date.setMonth(date.getMonth() + 1)
-    document.cookie = `refreshToken=${result.data};expires=${date};samesite=strict;path=/auth;`
+    document.cookie = `refreshToken=${result.data};expires=${date};samesite=strict;path=/;`
     dispatch({
       type: LOGIN,
     })
@@ -179,7 +179,7 @@ export const setUser = (): ThunkAction<
   if (refreshToken) {
     const response = await fetch('http://localhost:5000/api/auth/accessToken', {
       method: 'POST',
-      body: JSON.stringify({ refreshToken: unescape(refreshToken[2]) }),
+      body: JSON.stringify({ refreshToken: unescape(refreshToken![2]) }),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -194,12 +194,14 @@ export const setUser = (): ThunkAction<
       dispatch(setLoading(false))
     } else {
       const date = new Date()
-      date.setTime(date.getTime() - 1)
-      document.cookie = 'refreshToken=;expires=' + date
+      date.setTime(date.getTime() + 24 * 60 * 60 * 1000 * -1)
+      document.cookie = 'refreshToken=;expires=' + date + 'path=/'
+
+      console.log(result.data.refreshToken)
 
       const newDate = new Date()
       newDate.setMonth(newDate.getMonth() + 1)
-      document.cookie = `refreshToken=${result.data.refreshToken};expires=${newDate};samesite=strict;path=/auth;`
+      document.cookie = `refreshToken=${result.data.refreshToken};expires=${newDate};samesite=strict;path=/;`
 
       sessionStorage.setItem(
         'accessToken',
@@ -210,6 +212,8 @@ export const setUser = (): ThunkAction<
         type: SET_USER,
         payload: jwt_decode(result.data.accessToken),
       })
+
+      console.log(document.cookie.match('(^|;) ?refreshToken=([^;]*)(;|$)'))
 
       dispatch(setLoading(false))
     }

@@ -1,16 +1,44 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 import SignUpContainer from '../../containers/auth/signup/SignUpContainer'
 import LoginContainer from '../../containers/auth/login/LoginContainer'
-import Feed from '../feed/Feed'
+import { ThunkAction } from 'redux-thunk'
+import { AppState } from '../../store'
+import { Action } from 'redux'
+import FeedContainer from '../../containers/feed/FeedContainer'
+import NewPostContainer from '../../containers/new-post/NewPostContainer'
 
-const App: React.FC = () => (
-  <Router>
-    <Route path="/auth/signup" component={SignUpContainer} />
-    <Route path="/auth/login" component={LoginContainer} />
-    <Route path="/feed" component={Feed} />
-    <Redirect to="/feed" />
-  </Router>
-)
+interface AppProps {
+  user: {
+    _id: string
+    username: string
+  } | null
+  loading: boolean
+  setUser: () => ThunkAction<void, AppState, unknown, Action<string>>
+}
+
+const App: React.FC<AppProps> = ({ user, loading, setUser }) => {
+  useEffect(() => {
+    setUser()
+  }, [])
+
+  if (user) {
+    return (
+      <Router>
+        <Route path="/feed" exact component={FeedContainer} />
+        <Route path="/feed/new" component={NewPostContainer} />
+        <Redirect to="/feed/" />
+      </Router>
+    )
+  } else {
+    return (
+      <Router>
+        <Route path="/auth/signup" component={SignUpContainer} />
+        <Route path="/auth/login" component={LoginContainer} />
+        <Redirect to="/auth/login" />
+      </Router>
+    )
+  }
+}
 
 export default App

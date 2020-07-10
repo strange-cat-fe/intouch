@@ -3,6 +3,11 @@
   height: 100vh;
 }
 
+.container {
+  padding-bottom: 4rem;
+  background-color: #eee;
+}
+
 .newPost {
   background-color: #fff;
   display: flex;
@@ -15,6 +20,6 @@
 .link {
   background-color: #eee;
   height: 70%;
-  padding: 0.3rem 3rem 0.5rem 0.5rem;
+  padding: 0.5rem 3rem 0.5rem 1rem;
   border-radius: 10px;
 }
