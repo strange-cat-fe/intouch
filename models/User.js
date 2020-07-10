@@ -17,6 +17,14 @@ const user = new Schema({
     type: Boolean,
     dafault: false,
   },
+  img: {
+    type: String,
+    default: '',
+  },
+  theme: {
+    type: String,
+    default: 'light',
+  },
 })
 
 module.exports = model('User', user)

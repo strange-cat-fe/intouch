@@ -135,6 +135,8 @@ router.post('/accessToken', async (req, res) => {
           {
             userId: user._id,
             username: user.username,
+            img: user.img,
+            theme: user.theme,
           },
           config.get('jwtSecret'),
           {
