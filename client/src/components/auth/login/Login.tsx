@@ -71,6 +71,7 @@ const Login: React.FC<LoginProps> = ({
       setError(null)
       deleteSuccessMessage()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error, success])
 
   if (loading) {

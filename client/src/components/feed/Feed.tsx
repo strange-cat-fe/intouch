@@ -24,6 +24,7 @@ interface FeedProps {
 const Feed: React.FC<FeedProps> = ({ posts, loading, user, setPosts }) => {
   useEffect(() => {
     posts.length === 0 && setPosts()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

@@ -1,17 +1,17 @@
 import React from 'react'
 import classes from './Header.module.css'
-import { NavLink } from 'react-router-dom'
+import { NavLink, withRouter, RouteComponentProps } from 'react-router-dom'
 import { IoIosArrowBack as BackIcon } from 'react-icons/io'
 
-interface HeaderProps {
+interface HeaderProps extends RouteComponentProps {
   title: string
-  link?: string
+  link?: boolean
 }
 
-const Header: React.FC<HeaderProps> = ({ title, link }) => (
+const Header: React.FC<HeaderProps> = ({ title, link, history }) => (
   <div className={classes.header}>
     {link && (
-      <NavLink className={classes.link} to={link}>
+      <NavLink className={classes.link} to="/" onClick={() => history.goBack()}>
         <BackIcon />
       </NavLink>
     )}
@@ -19,4 +19,4 @@ const Header: React.FC<HeaderProps> = ({ title, link }) => (
   </div>
 )
 
-export default Header
+export default withRouter(Header)

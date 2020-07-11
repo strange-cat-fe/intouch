@@ -197,8 +197,6 @@ export const setUser = (): ThunkAction<
       date.setTime(date.getTime() + 24 * 60 * 60 * 1000 * -1)
       document.cookie = 'refreshToken=;expires=' + date + 'path=/'
 
-      console.log(result.data.refreshToken)
-
       const newDate = new Date()
       newDate.setMonth(newDate.getMonth() + 1)
       document.cookie = `refreshToken=${result.data.refreshToken};expires=${newDate};samesite=strict;path=/;`
@@ -212,8 +210,6 @@ export const setUser = (): ThunkAction<
         type: SET_USER,
         payload: jwt_decode(result.data.accessToken),
       })
-
-      console.log(document.cookie.match('(^|;) ?refreshToken=([^;]*)(;|$)'))
 
       dispatch(setLoading(false))
     }
