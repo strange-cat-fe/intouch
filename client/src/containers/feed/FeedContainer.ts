@@ -38,4 +38,4 @@ const connector = connect(mapStateToProps, mapDispatchToProps)
 
 export type FeedProps = ConnectedProps<typeof connector>
 
-export default connector(Feed as any)
+export default connector(Feed)

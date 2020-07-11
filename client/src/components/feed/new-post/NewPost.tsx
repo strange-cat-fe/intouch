@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ChangeEvent, useEffect } from 'react'
 import classes from './NewPost.module.css'
 import Header from '../../header/Header'
 import {
@@ -19,15 +19,20 @@ const NewPost: React.FC<NewPostProps & RouteComponentProps> = ({
   addPost,
 }) => {
   const [loading, setLoading] = React.useState(false)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  React.useEffect((): any => () => updateForm({ text: '', img: '' }), [])
 
-  const handleImgChange = async (e: any) => {
+  useEffect(() => {
+    return () => {
+      updateForm({ text: '', img: '' })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const handleImgChange = async (e: InputEvent) => {
     setLoading(true)
 
-    const [img] = e.target.files
+    const img = (e.target as HTMLInputElement).files!
     const formData = new FormData()
-    formData.append('photo', img)
+    formData.append('photo', img[0])
 
     const response = await fetch(
       `http://localhost:5000/api/upload/singleImage?token=${JSON.parse(
@@ -67,8 +72,11 @@ const NewPost: React.FC<NewPostProps & RouteComponentProps> = ({
               placeholder="Write new post here..."
               resize="none"
               height="200px"
-              onChange={(e: any) =>
-                updateForm({ ...form, text: e.target.value })
+              onChange={(e: ChangeEvent) =>
+                updateForm({
+                  ...form,
+                  text: (e.target as HTMLTextAreaElement).value,
+                })
               }
             />
           </FormControl>

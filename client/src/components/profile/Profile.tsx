@@ -9,7 +9,11 @@ import PostContainer from '../../containers/post/PostContainer'
 import { Waypoint } from 'react-waypoint'
 import { ProfileProps } from '../../containers/profile/ProfileContainer'
 
-const Profile: React.FC<ProfileProps & RouteComponentProps> = ({
+interface Params {
+  username?: string
+}
+
+const Profile: React.FC<ProfileProps & RouteComponentProps<Params>> = ({
   username,
   loading,
   posts,
@@ -20,7 +24,7 @@ const Profile: React.FC<ProfileProps & RouteComponentProps> = ({
 }) => {
   useEffect(() => {
     setProfileInfo(
-      (match as any).params.username ? (match as any).params.username : null,
+      match.params.username ? match.params.username : null,
     )
 
     posts.length === 0 && setPosts()
@@ -44,14 +48,14 @@ const Profile: React.FC<ProfileProps & RouteComponentProps> = ({
         {username && <Avatar name={username} src="" />}
         <div className={classes.username}>{username}</div>
       </div>
-      {((match as any).params.username === currentUser ||
-        !(match as any).params.username) && (
+      {(match.params.username === currentUser ||
+        !match.params.username && (
         <NavLink className={classes.btn} to="/profile/settings">
           Settings
         </NavLink>
       )}
-      {((match as any).params.username === currentUser ||
-        !(match as any).params.username) && (
+      {(match.params.username === currentUser ||
+        !(match.params.username) && (
         <div className={classes.newPost}>
           <NavLink className={classes.link} to="/feed/new">
             Write new post here...

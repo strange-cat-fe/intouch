@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, ChangeEvent, FormEvent } from 'react'
 import classes from './Login.module.css'
 import logo from '../../../logo.png'
 import {
@@ -26,7 +26,7 @@ const Login: React.FC<LoginProps & RouteComponentProps> = ({
 }) => {
   const toast = useToast()
 
-  useEffect((): any => {
+  useEffect(() => {
     error &&
       toast({
         title: 'Error',
@@ -69,10 +69,11 @@ const Login: React.FC<LoginProps & RouteComponentProps> = ({
   return (
     <form
       className={classes.form}
-      onChange={e =>
+      onChange={(e: FormEvent<HTMLFormElement>) =>
         updateLoginForm({
           ...form,
-          [(e.target as any).name]: (e.target as any).value,
+          [(e.target as HTMLFormElement).name]: (e.target as HTMLInputElement)
+            .value,
         })
       }
       onSubmit={e => {

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, FormEvent } from 'react'
 import classes from './SignUp.module.css'
 import logo from '../../../logo.png'
 import {
@@ -25,7 +25,7 @@ const SignUp: React.FC<SignUpProps & RouteComponentProps> = ({
 }) => {
   const toast = useToast()
 
-  useEffect((): any => {
+  useEffect(() => {
     error &&
       toast({
         title: 'Error',
@@ -36,7 +36,9 @@ const SignUp: React.FC<SignUpProps & RouteComponentProps> = ({
         onClose: () => setError(null),
       })
 
-    return () => setError(null)
+    return () => {
+      setError(null)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error])
 
@@ -56,10 +58,11 @@ const SignUp: React.FC<SignUpProps & RouteComponentProps> = ({
   return (
     <form
       className={classes.form}
-      onChange={e =>
+      onChange={(e: FormEvent<HTMLFormElement>) =>
         updateSignUpForm({
           ...form,
-          [(e.target as any).name]: (e.target as any).value,
+          [(e.target as HTMLFormElement).name]: (e.target as HTMLInputElement)
+            .value,
         })
       }
       onSubmit={e => {
