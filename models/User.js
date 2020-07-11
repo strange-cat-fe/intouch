@@ -30,9 +30,4 @@ const user = new Schema({
   },
 })
 
-user.methods.getPosts = async function () {
-  const posts = await Post.find({ 'author._id': this._id })
-  return posts
-}
-
 module.exports = model('User', user)
