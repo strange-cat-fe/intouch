@@ -16,7 +16,7 @@ cloudinary.config({
   api_secret: config.get('cloud_api_secret'),
 })
 
-router.post('/postPhoto', fileupload({ useTempFiles: true }), (req, res) => {
+router.post('/singleImage', fileupload({ useTempFiles: true }), (req, res) => {
   const file = req.files.photo
 
   if (!fileFilter(file))
