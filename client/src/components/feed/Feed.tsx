@@ -1,23 +1,58 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import classes from './Feed.module.css'
 import Header from '../header/Header'
 import AppMenu from '../app-menu/AppMenu'
-import { Avatar } from '@chakra-ui/core'
+import { Avatar, Progress } from '@chakra-ui/core'
 import { NavLink } from 'react-router-dom'
-import Post from './post/Post'
+import { Post } from '../../types/feed'
+import { ThunkAction } from 'redux-thunk'
+import { AppState } from '../../store'
+import { Action } from 'redux'
+import { Waypoint } from 'react-waypoint'
+import PostContainer from '../../containers/post/PostContainer'
 
-const Feed: React.FC = () => (
-  <div className={classes.feed}>
-    <Header title="Feed" />
-    <div className={classes.newPost}>
-      <Avatar name="Kirill Kumma" src="" />
-      <NavLink className={classes.link} to="/feed/new">
-        Write new post here...
-      </NavLink>
+interface FeedProps {
+  posts: Post[] | []
+  loading: boolean
+  user: {
+    userId: string
+    username: string
+  }
+  setPosts: () => ThunkAction<void, AppState, unknown, Action<string>>
+}
+
+const Feed: React.FC<FeedProps> = ({ posts, loading, user, setPosts }) => {
+  useEffect(() => {
+    posts.length === 0 && setPosts()
+  }, [])
+
+  return (
+    <div className={classes.feed}>
+      <Header title="Feed" />
+      <div className={classes.newPost}>
+        <Avatar name={user.username} src="" />
+        <NavLink className={classes.link} to="/feed/new">
+          Write new post here...
+        </NavLink>
+      </div>
+      <div className={classes.container}>
+        {(posts as Post[]).map((p: Post, i: number) => {
+          if (i === posts.length - 1) {
+            return (
+              <React.Fragment key={p._id}>
+                <Waypoint onEnter={() => setPosts()} />
+                <PostContainer {...p} />
+              </React.Fragment>
+            )
+          } else {
+            return <PostContainer {...p} key={p._id} />
+          }
+        })}
+      </div>
+      {loading && <Progress isAnimated hasStripe value={100} />}
+      <AppMenu />
     </div>
-    <Post />
-    <AppMenu />
-  </div>
-)
+  )
+}
 
 export default Feed

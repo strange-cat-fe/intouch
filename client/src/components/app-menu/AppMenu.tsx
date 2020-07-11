@@ -1,7 +1,7 @@
 import React from 'react'
 import classes from './AppMenu.module.css'
 import { NavLink } from 'react-router-dom'
-import { Icon, Box } from '@chakra-ui/core'
+import { Box } from '@chakra-ui/core'
 import { RiFileList2Line as FeedIcon } from 'react-icons/ri'
 
 const AppMenu: React.FC = () => (

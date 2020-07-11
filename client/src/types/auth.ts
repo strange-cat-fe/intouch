@@ -24,7 +24,7 @@ export interface AuthState {
   }
   error: string | null
   loading: boolean
-  user: null | { username: string; _id: string }
+  user: null | { username: string; userId: string }
 }
 
 export interface UpdateSignUpFormAction {
@@ -74,7 +74,7 @@ export interface SetUserAction {
   type: typeof SET_USER
   payload: {
     username: string
-    _id: string
+    userId: string
   }
 }
 
