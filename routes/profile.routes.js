@@ -1,6 +1,8 @@
 const { Router } = require('express')
 
 const User = require('../models/User')
+const Post = require('../models/Post')
+const paginatedResults = require('../middleware/pagination')
 
 const router = Router()
 
@@ -17,19 +19,12 @@ router.post('/changeAvatar', async (req, res) => {
   }
 })
 
-router.get('/:username/posts', async (req, res) => {
+router.get('/:username/posts', paginatedResults(Post), async (req, res) => {
   try {
-    const user = await User.findOne({ username: req.params.username })
-    const posts = await user.getPosts()
+    const posts = res.paginatedResults
 
-    if (posts)
-      return res.status(200).json({
-        data: posts.reverse(),
-      })
-
-    res.status(200).json({
-      data: 'No posts',
-    })
+    if (posts) return res.status(200).json({ data: posts })
+    res.status(200).json({ data: 'No posts' })
   } catch (e) {
     res.status(500).json({ data: e })
   }
