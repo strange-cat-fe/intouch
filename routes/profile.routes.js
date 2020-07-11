@@ -19,17 +19,6 @@ router.post('/changeAvatar', async (req, res) => {
   }
 })
 
-router.get('/:username/posts', paginatedResults(Post), async (req, res) => {
-  try {
-    const posts = res.paginatedResults
-
-    if (posts) return res.status(200).json({ data: posts })
-    res.status(200).json({ data: 'No posts' })
-  } catch (e) {
-    res.status(500).json({ data: e })
-  }
-})
-
 router.get('/:username/info', async (req, res) => {
   try {
     const user = await User.findOne({ username: req.params.username })
