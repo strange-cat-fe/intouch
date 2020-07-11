@@ -1,8 +1,11 @@
 module.exports = model => {
   return async (req, res, next) => {
+    let filter = {}
+    if (req.params.username) filter = { 'author.username': req.params.username }
+
     const page = parseInt(req.query.page)
     const limit = 5
-    const countElems = await model.countDocuments().exec()
+    const countElems = await model.find(filter).countDocuments().exec()
 
     const totalPages = Math.ceil(countElems / limit)
 
@@ -15,13 +18,13 @@ module.exports = model => {
     if (endIndex < countElems) results.previous = page - 1
 
     try {
-      const posts = await model
-        .find()
+      const elems = await model
+        .find(filter)
         .limit(endIndex - startIndex)
         .skip(startIndex)
         .exec()
 
-      results.posts = posts.slice().reverse()
+      results.elems = elems.slice().reverse()
       res.paginatedResults = results
 
       next()
