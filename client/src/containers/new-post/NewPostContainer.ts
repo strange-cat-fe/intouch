@@ -1,4 +1,4 @@
-import { connect } from 'react-redux'
+import { connect, ConnectedProps } from 'react-redux'
 import NewPost from '../../components/feed/new-post/NewPost'
 import { UpdateFormAction } from '../../types/feed'
 import { AppState } from '../../store'
@@ -30,4 +30,8 @@ const mapDispatchToProps: LinkDispatchToProps = {
   addPost,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewPost as any)
+const connector = connect(mapStateToProps, mapDispatchToProps)
+
+export type NewPostProps = ConnectedProps<typeof connector>
+
+export default connector(NewPost)

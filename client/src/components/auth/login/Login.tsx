@@ -10,31 +10,10 @@ import {
   Link,
   useToast,
 } from '@chakra-ui/core'
-import { SetErrorAction, DeleteSuccessMessageAction } from '../../../types/auth'
-import { ThunkAction } from 'redux-thunk'
-import { AppState } from '../../../store'
-import { Action } from 'redux'
 import { withRouter, RouteComponentProps } from 'react-router-dom'
+import { LoginProps } from '../../../containers/auth/login/LoginContainer'
 
-interface LoginProps extends RouteComponentProps {
-  form: {
-    email: string
-    password: string
-    valid: boolean
-  }
-  success: string | null
-  error: string | null
-  loading: boolean
-  updateLoginForm: (form: {
-    email: string
-    password: string
-  }) => ThunkAction<void, AppState, unknown, Action<string>>
-  login: () => ThunkAction<void, AppState, unknown, Action<string>>
-  setError: (error: string | null) => SetErrorAction
-  deleteSuccessMessage: () => DeleteSuccessMessageAction
-}
-
-const Login: React.FC<LoginProps> = ({
+const Login: React.FC<LoginProps & RouteComponentProps> = ({
   form,
   error,
   loading,

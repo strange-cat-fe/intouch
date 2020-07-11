@@ -1,4 +1,4 @@
-import { connect } from 'react-redux'
+import { connect, ConnectedProps } from 'react-redux'
 import Profile from '../../components/profile/Profile'
 import { Post } from '../../types/feed'
 import { ThunkAction } from 'redux-thunk'
@@ -35,4 +35,8 @@ const mapDispatchToProps: LinkDispatchToProps = {
   setPosts,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Profile as any)
+const connector = connect(mapStateToProps, mapDispatchToProps)
+
+export type ProfileProps = ConnectedProps<typeof connector>
+
+export default connector(Profile)

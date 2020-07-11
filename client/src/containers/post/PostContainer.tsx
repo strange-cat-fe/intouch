@@ -1,10 +1,11 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import PostComponent, { PostProps } from '../../components/feed/post/Post'
+import { connect, ConnectedProps } from 'react-redux'
+import PostComponent from '../../components/feed/post/Post'
 import { ThunkAction } from 'redux-thunk'
 import { AppState } from '../../store'
 import { Action } from 'redux'
 import { setLike } from '../../actions/feed'
+import { Post } from '../../types/feed'
 
 const PostContainer: React.FC<PostProps> = props => <PostComponent {...props} />
 
@@ -28,7 +29,8 @@ const mapDispatchToProps: LinkDispatchToProps = {
   setLike,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(PostContainer as any)
+const connector = connect(mapStateToProps, mapDispatchToProps)
+
+export type PostProps = ConnectedProps<typeof connector> & Post
+
+export default connector(PostContainer)

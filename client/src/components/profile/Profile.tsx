@@ -5,24 +5,11 @@ import AppMenu from '../app-menu/AppMenu'
 import { Avatar, Progress } from '@chakra-ui/core'
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom'
 import { Post } from '../../types/feed'
-import { ThunkAction } from 'redux-thunk'
-import { AppState } from '../../store'
-import { Action } from 'redux'
 import PostContainer from '../../containers/post/PostContainer'
 import { Waypoint } from 'react-waypoint'
+import { ProfileProps } from '../../containers/profile/ProfileContainer'
 
-interface ProfileProps extends RouteComponentProps {
-  username: string | null
-  loading: boolean
-  posts: Post[] | []
-  currentUser: string
-  setProfileInfo: (
-    username: string | null,
-  ) => ThunkAction<void, AppState, unknown, Action<string>>
-  setPosts: () => ThunkAction<void, AppState, unknown, Action<string>>
-}
-
-const Profile: React.FC<ProfileProps> = ({
+const Profile: React.FC<ProfileProps & RouteComponentProps> = ({
   username,
   loading,
   posts,
@@ -38,11 +25,17 @@ const Profile: React.FC<ProfileProps> = ({
 
     posts.length === 0 && setPosts()
 
+    window.scrollTo(0, 0)
+
     return () => {
       setProfileInfo(null)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  const usersPosts = (posts as Post[]).filter(
+    p => p.author.username === username,
+  )
 
   return (
     <div className={classes.profile}>
@@ -66,20 +59,18 @@ const Profile: React.FC<ProfileProps> = ({
         </div>
       )}
       <div className={classes.container}>
-        {(posts as Post[])
-          .filter(p => p.author.username === currentUser)
-          .map((p, i) => {
-            if (i === posts.length - 1) {
-              return (
-                <React.Fragment key={p._id}>
-                  <Waypoint onEnter={() => setPosts()} />
-                  <PostContainer {...p} />
-                </React.Fragment>
-              )
-            } else {
-              return <PostContainer {...p} key={p._id} />
-            }
-          })}
+        {usersPosts.map((p, i) => {
+          if (i === usersPosts.length - 1) {
+            return (
+              <React.Fragment key={p._id}>
+                <Waypoint onEnter={() => setPosts()} />
+                <PostContainer {...p} />
+              </React.Fragment>
+            )
+          } else {
+            return <PostContainer {...p} key={p._id} />
+          }
+        })}
         {loading && <Progress isAnimated hasStripe value={100} />}
       </div>
       <AppMenu />

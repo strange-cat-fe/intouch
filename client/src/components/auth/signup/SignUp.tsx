@@ -11,33 +11,10 @@ import {
   Link,
   useToast,
 } from '@chakra-ui/core'
-import { SetErrorAction } from '../../../types/auth'
-import { ThunkAction } from 'redux-thunk'
-import { AppState } from '../../../store'
-import { Action } from 'redux'
 import { withRouter, RouteComponentProps, Redirect } from 'react-router-dom'
+import { SignUpProps } from '../../../containers/auth/signup/SignUpContainer'
 
-interface SignUpProps extends RouteComponentProps {
-  form: {
-    email: string
-    username: string
-    password: string
-    valid: boolean
-    success: string | null
-  }
-  loading: boolean
-  error: string | null
-  updateSignUpForm: (form: {
-    email: string
-    username: string
-    password: string
-    valid: boolean
-  }) => ThunkAction<void, AppState, unknown, Action<string>>
-  signUp: () => ThunkAction<void, AppState, unknown, Action<string>>
-  setError: (error: string | null) => SetErrorAction
-}
-
-const SignUp: React.FC<SignUpProps> = ({
+const SignUp: React.FC<SignUpProps & RouteComponentProps> = ({
   form,
   loading,
   error,

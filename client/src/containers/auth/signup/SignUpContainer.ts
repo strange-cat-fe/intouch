@@ -1,4 +1,4 @@
-import { connect } from 'react-redux'
+import { connect, ConnectedProps } from 'react-redux'
 import SignUp from '../../../components/auth/signup/SignUp'
 import { updateSignUpForm, signUp, setError } from '../../../actions/auth'
 import { SetErrorAction } from '../../../types/auth'
@@ -43,5 +43,8 @@ const mapDispatchToProps: LinkDispatchToProps = {
   setError,
 }
 
-// TODO: fix typechecking error
-export default connect(mapStateToProps, mapDispatchToProps)(SignUp as any)
+const connector = connect(mapStateToProps, mapDispatchToProps)
+
+export type SignUpProps = ConnectedProps<typeof connector>
+
+export default connector(SignUp)

@@ -9,23 +9,10 @@ import {
   Image,
   Progress,
 } from '@chakra-ui/core'
-import { UpdateFormAction } from '../../../types/feed'
-import { ThunkAction } from 'redux-thunk'
-import { AppState } from '../../../store'
-import { Action } from 'redux'
 import { withRouter, RouteComponentProps } from 'react-router-dom'
+import { NewPostProps } from '../../../containers/new-post/NewPostContainer'
 
-interface NewPostProps extends RouteComponentProps {
-  form: {
-    text: string
-    img: string
-    valid: boolean
-  }
-  updateForm: (form: { text: string; img: string }) => UpdateFormAction
-  addPost: () => ThunkAction<void, AppState, unknown, Action<string>>
-}
-
-const NewPost: React.FC<NewPostProps> = ({
+const NewPost: React.FC<NewPostProps & RouteComponentProps> = ({
   form,
   history,
   updateForm,
@@ -43,7 +30,7 @@ const NewPost: React.FC<NewPostProps> = ({
     formData.append('photo', img)
 
     const response = await fetch(
-      `http://localhost:5000/api/upload/postPhoto?token=${JSON.parse(
+      `http://localhost:5000/api/upload/singleImage?token=${JSON.parse(
         sessionStorage.getItem('accessToken')!,
       )}`,
       {
@@ -95,6 +82,7 @@ const NewPost: React.FC<NewPostProps> = ({
                 className={classes.imgInput}
                 id="new-post-img"
                 type="file"
+                accept="image/x-png,image/gif,image/jpeg"
               />
             </div>
             <Button type="submit" variantColor="blue" isDisabled={!form.valid}>

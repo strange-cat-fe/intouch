@@ -5,21 +5,9 @@ import AppMenu from '../app-menu/AppMenu'
 import { Avatar, Progress } from '@chakra-ui/core'
 import { NavLink } from 'react-router-dom'
 import { Post } from '../../types/feed'
-import { ThunkAction } from 'redux-thunk'
-import { AppState } from '../../store'
-import { Action } from 'redux'
 import { Waypoint } from 'react-waypoint'
 import PostContainer from '../../containers/post/PostContainer'
-
-interface FeedProps {
-  posts: Post[] | []
-  loading: boolean
-  user: {
-    userId: string
-    username: string
-  }
-  setPosts: () => ThunkAction<void, AppState, unknown, Action<string>>
-}
+import { FeedProps } from '../../containers/feed/FeedContainer'
 
 const Feed: React.FC<FeedProps> = ({ posts, loading, user, setPosts }) => {
   useEffect(() => {

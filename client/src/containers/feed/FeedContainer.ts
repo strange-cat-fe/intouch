@@ -1,4 +1,4 @@
-import { connect } from 'react-redux'
+import { connect, ConnectedProps } from 'react-redux'
 import Feed from '../../components/feed/Feed'
 import { Post } from '../../types/feed'
 import { ThunkAction } from 'redux-thunk'
@@ -34,5 +34,8 @@ const mapDispatchToProps: LinkDispatchToProps = {
   setPosts,
 }
 
-// TODO: fix typechecking error
-export default connect(mapStateToProps, mapDispatchToProps)(Feed as any)
+const connector = connect(mapStateToProps, mapDispatchToProps)
+
+export type FeedProps = ConnectedProps<typeof connector>
+
+export default connector(Feed as any)
