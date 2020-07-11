@@ -8,6 +8,7 @@ import {
   SET_USER,
   DELETE_SUCCESS_MESSAGE,
 } from '../constants/auth'
+import { Post } from './feed'
 
 export interface AuthState {
   signup: {

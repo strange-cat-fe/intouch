@@ -7,6 +7,7 @@ import { Post } from '../../../types/feed'
 import { ThunkAction } from 'redux-thunk'
 import { AppState } from '../../../store'
 import { Action } from 'redux'
+import { NavLink } from 'react-router-dom'
 
 export interface PostProps extends Post {
   userId: string
@@ -29,7 +30,9 @@ const PostComponent: React.FC<PostProps> = ({
     <div className={classes.header}>
       <Avatar name={author.username} src="" />
       <div className={classes.data}>
-        <p className={classes.author}>{author.username}</p>
+        <NavLink className={classes.author} to={`/profile/${author.username}`}>
+          {author.username}
+        </NavLink>
         <p className={classes.date}>{date}</p>
       </div>
     </div>

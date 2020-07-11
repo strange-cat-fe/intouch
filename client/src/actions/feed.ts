@@ -36,7 +36,7 @@ export const setPosts = (): ThunkAction<
 
     dispatch({
       type: SET_POSTS,
-      payload: result.data.posts,
+      payload: result.data.elems,
       hasMore: result.data.next ? true : false,
       page: getState().feed.page + 1,
     })

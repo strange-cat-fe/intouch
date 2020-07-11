@@ -16,6 +16,7 @@ export interface FeedState {
     img: string
     valid: boolean
   }
+  usersPosts: Post[] | []
 }
 
 export interface Post {

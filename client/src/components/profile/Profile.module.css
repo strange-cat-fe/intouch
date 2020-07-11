@@ -1,0 +1,55 @@
+.profile {
+  background-color: #eee;
+  height: 100vh;
+}
+
+.info {
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.username {
+  font-size: 2rem;
+  margin-left: 1rem;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background-color: #4299e1;
+  color: #fff;
+  padding: 0.5rem 0;
+  margin: 0 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.newPost {
+  background-color: #fff;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.link {
+  display: block;
+  background: #eee;
+  border-radius: 10px;
+  padding: 0.5rem 1rem 1rem 1rem;
+}
+
+.btn:active,
+.btn:focus,
+.link:active,
+.link:focus {
+  outline: none;
+}
+
+.container {
+  background-color: #eee;
+  padding-bottom: 4rem;
+}

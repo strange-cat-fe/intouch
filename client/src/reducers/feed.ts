@@ -24,6 +24,7 @@ const initialState: FeedState = {
     img: '',
     valid: false,
   },
+  usersPosts: [],
 }
 
 export default (state = initialState, action: FeedActions): FeedState => {

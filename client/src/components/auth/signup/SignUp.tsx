@@ -60,6 +60,7 @@ const SignUp: React.FC<SignUpProps> = ({
       })
 
     return () => setError(null)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error])
 
   if (loading) {

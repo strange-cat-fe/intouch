@@ -32,6 +32,8 @@ const NewPost: React.FC<NewPostProps> = ({
   addPost,
 }) => {
   const [loading, setLoading] = React.useState(false)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  React.useEffect((): any => () => updateForm({ text: '', img: '' }), [])
 
   const handleImgChange = async (e: any) => {
     setLoading(true)
@@ -59,7 +61,7 @@ const NewPost: React.FC<NewPostProps> = ({
 
   return (
     <div className={classes.newPost}>
-      <Header title="New Post" link="/feed" />
+      <Header title="New Post" link />
       <form
         className={classes.form}
         onSubmit={e => {
