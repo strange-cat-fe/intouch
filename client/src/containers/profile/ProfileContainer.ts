@@ -9,6 +9,7 @@ import { setPosts } from '../../actions/feed'
 
 interface LinkStateToProps {
   username: string | null
+  img: string | null
   loading: boolean
   posts: Post[] | []
   currentUser: string
@@ -24,6 +25,7 @@ interface LinkDispatchToProps {
 const mapStateToProps = (state: AppState): LinkStateToProps => {
   return {
     username: state.profile.username,
+    img: state.profile.img,
     loading: state.feed.loading,
     posts: state.feed.posts,
     currentUser: state.auth.user!.username,

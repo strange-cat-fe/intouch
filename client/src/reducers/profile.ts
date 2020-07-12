@@ -7,6 +7,7 @@ import { SET_PROFILE_INFO } from '../constants/profile'
 
 const initialState: ProfileState = {
   username: null,
+  img: null,
   posts: [],
 }
 

@@ -1,4 +1,4 @@
-import React, { useEffect, FormEvent } from 'react'
+import React, { useEffect, FormEvent, useState } from 'react'
 import classes from './SignUp.module.css'
 import logo from '../../../logo.png'
 import {
@@ -24,8 +24,14 @@ const SignUp: React.FC<SignUpProps & RouteComponentProps> = ({
   history,
 }) => {
   const toast = useToast()
+  const [width, setWidth] = useState(0)
+
+  const updateWidth = () => setWidth(window.innerWidth)
 
   useEffect(() => {
+    updateWidth()
+    window.addEventListener('resize', updateWidth)
+
     error &&
       toast({
         title: 'Error',
@@ -37,6 +43,7 @@ const SignUp: React.FC<SignUpProps & RouteComponentProps> = ({
       })
 
     return () => {
+      window.removeEventListener('resize', updateWidth)
       setError(null)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -55,6 +62,88 @@ const SignUp: React.FC<SignUpProps & RouteComponentProps> = ({
       </div>
     )
   }
+
+  if (width <= 768) {
+    return (
+      <form
+        className={classes.form}
+        onChange={(e: FormEvent<HTMLFormElement>) =>
+          updateSignUpForm({
+            ...form,
+            [(e.target as HTMLFormElement).name]: (e.target as HTMLInputElement)
+              .value,
+          })
+        }
+        onSubmit={e => {
+          e.preventDefault()
+          signUp()
+        }}
+      >
+        <SimpleGrid columns={1} spacing="1rem">
+          <img className={classes.img} src={logo} alt="InTouch Logo" />
+          <FormControl>
+            <Input
+              name="email"
+              type="email"
+              placeholder="Email"
+              defaultValue={form.email}
+              aria-describedby="email-helper-text"
+              focusBorderColor="blue.400"
+            />
+            <FormHelperText id="email-helper-text">
+              Make sure to provie real E-mail
+            </FormHelperText>
+          </FormControl>
+          <FormControl>
+            <Input
+              name="username"
+              type="text"
+              placeholder="Username"
+              defaultValue={form.username}
+              aria-describedby="username-helper-text"
+              focusBorderColor="blue.400"
+            />
+            <FormHelperText id="username-helper-text">
+              At least 4 characters
+            </FormHelperText>
+          </FormControl>
+          <FormControl>
+            <Input
+              name="password"
+              type="password"
+              placeholder="Password"
+              defaultValue={form.password}
+              aria-describedby="password-helper-text"
+              focusBorderColor="blue.400"
+            />
+            <FormHelperText id="password-helper-text">
+              Combination of 8 characters
+            </FormHelperText>
+          </FormControl>
+          <Button
+            type="submit"
+            variantColor="blue"
+            variant="solid"
+            isDisabled={!form.valid}
+          >
+            Sign Up
+          </Button>
+          <Link
+            className={classes.link}
+            onClick={(e: React.FormEvent<HTMLAnchorElement>) => {
+              e.preventDefault()
+              setError(null)
+              history.push('/auth/login')
+            }}
+          >
+            Already have an account?
+          </Link>
+        </SimpleGrid>
+        {form.success && <Redirect to="/auth/login" />}
+      </form>
+    )
+  }
+
   return (
     <form
       className={classes.form}
@@ -70,7 +159,7 @@ const SignUp: React.FC<SignUpProps & RouteComponentProps> = ({
         signUp()
       }}
     >
-      <SimpleGrid columns={1} spacing="1rem">
+      <SimpleGrid columns={1} spacing="1rem" width="320px" margin="0 auto">
         <img className={classes.img} src={logo} alt="InTouch Logo" />
         <FormControl>
           <Input

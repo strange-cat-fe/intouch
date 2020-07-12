@@ -30,7 +30,7 @@ const Feed: React.FC<FeedProps> = ({ posts, loading, user, setPosts }) => {
       <div className={classes.feed}>
         <Header title="Feed" />
         <div className={classes.newPost}>
-          <Avatar name={user.username} src="" />
+          <Avatar name={user.username} src={user.img} />
           <NavLink className={classes.link} to="/feed/new">
             Write new post here...
           </NavLink>

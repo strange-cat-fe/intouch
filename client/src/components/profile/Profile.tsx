@@ -15,6 +15,7 @@ interface Params {
 
 const Profile: React.FC<ProfileProps & RouteComponentProps<Params>> = ({
   username,
+  img,
   loading,
   posts,
   match,
@@ -52,7 +53,7 @@ const Profile: React.FC<ProfileProps & RouteComponentProps<Params>> = ({
       <div className={classes.profile}>
         <Header title="Profile" />
         <div className={classes.info}>
-          {username && <Avatar name={username} src="" />}
+          {username && <Avatar name={username} src={img!} />}
           <div className={classes.username}>{username}</div>
         </div>
         {match.params.username === currentUser ||
