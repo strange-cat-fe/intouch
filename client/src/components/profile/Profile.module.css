@@ -53,3 +53,18 @@
   background-color: #eee;
   padding-bottom: 4rem;
 }
+
+.desk {
+  padding-top: 2.5rem;
+  margin: 0 auto;
+  width: 320px;
+}
+
+.profileDesk {
+  background-color: #eee;
+}
+
+.containerDesk {
+  background-color: #eee;
+  padding-bottom: 0.5rem;
+}

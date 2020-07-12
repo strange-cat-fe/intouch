@@ -23,3 +23,8 @@
 .imgInput {
   display: none;
 }
+
+.newPost {
+  background-color: #eee;
+  height: 100vh;
+}

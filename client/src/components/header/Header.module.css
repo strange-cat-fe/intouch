@@ -25,3 +25,24 @@
 .link:active {
   outline: none;
 }
+
+.headerDesk {
+  position: fixed;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  height: 2rem;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  z-index: 1;
+}
+
+.textDesk {
+  font-weight: 400;
+  font-size: 1.3rem;
+}
+
+.linkDesk {
+  display: none;
+}
