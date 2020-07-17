@@ -2,21 +2,11 @@ import React, { useEffect } from 'react'
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 import SignUpContainer from '../../containers/auth/signup/SignUpContainer'
 import LoginContainer from '../../containers/auth/login/LoginContainer'
-import { ThunkAction } from 'redux-thunk'
-import { AppState } from '../../store'
-import { Action } from 'redux'
 import FeedContainer from '../../containers/feed/FeedContainer'
 import NewPostContainer from '../../containers/new-post/NewPostContainer'
 import ProfileContainer from '../../containers/profile/ProfileContainer'
-
-interface AppProps {
-  user: {
-    _id: string
-    username: string
-  } | null
-  loading: boolean
-  setUser: () => ThunkAction<void, AppState, unknown, Action<string>>
-}
+import { AppProps } from '../../containers/app/AppContainer'
+import SettingsContainer from '../../containers/settings/SettingsContainer'
 
 const App: React.FC<AppProps> = ({ user, setUser }) => {
   useEffect(() => {
@@ -30,6 +20,7 @@ const App: React.FC<AppProps> = ({ user, setUser }) => {
         <Route path="/feed" exact component={FeedContainer} />
         <Route path="/feed/new" component={NewPostContainer} />
         <Route path="/profile/:username?" component={ProfileContainer} />
+        <Route path="/settings" component={SettingsContainer} />
         <Redirect to="/feed" />
       </Router>
     )

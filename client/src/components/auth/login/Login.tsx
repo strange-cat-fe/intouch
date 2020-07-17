@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, FormEvent, useState } from 'react'
 import classes from './Login.module.css'
 import logo from '../../../logo.png'
 import {
@@ -10,31 +10,10 @@ import {
   Link,
   useToast,
 } from '@chakra-ui/core'
-import { SetErrorAction, DeleteSuccessMessageAction } from '../../../types/auth'
-import { ThunkAction } from 'redux-thunk'
-import { AppState } from '../../../store'
-import { Action } from 'redux'
 import { withRouter, RouteComponentProps } from 'react-router-dom'
+import { LoginProps } from '../../../containers/auth/login/LoginContainer'
 
-interface LoginProps extends RouteComponentProps {
-  form: {
-    email: string
-    password: string
-    valid: boolean
-  }
-  success: string | null
-  error: string | null
-  loading: boolean
-  updateLoginForm: (form: {
-    email: string
-    password: string
-  }) => ThunkAction<void, AppState, unknown, Action<string>>
-  login: () => ThunkAction<void, AppState, unknown, Action<string>>
-  setError: (error: string | null) => SetErrorAction
-  deleteSuccessMessage: () => DeleteSuccessMessageAction
-}
-
-const Login: React.FC<LoginProps> = ({
+const Login: React.FC<LoginProps & RouteComponentProps> = ({
   form,
   error,
   loading,
@@ -46,8 +25,14 @@ const Login: React.FC<LoginProps> = ({
   history,
 }) => {
   const toast = useToast()
+  const [width, setWidth] = useState(0)
 
-  useEffect((): any => {
+  const updateWidth = () => setWidth(window.innerWidth)
+
+  useEffect(() => {
+    updateWidth()
+    window.addEventListener('resize', updateWidth)
+
     error &&
       toast({
         title: 'Error',
@@ -68,6 +53,7 @@ const Login: React.FC<LoginProps> = ({
       })
 
     return () => {
+      window.removeEventListener('resize', updateWidth)
       setError(null)
       deleteSuccessMessage()
     }
@@ -87,13 +73,75 @@ const Login: React.FC<LoginProps> = ({
       </div>
     )
   }
+
+  if (width <= 768) {
+    return (
+      <form
+        className={classes.form}
+        onChange={(e: FormEvent<HTMLFormElement>) =>
+          updateLoginForm({
+            ...form,
+            [(e.target as HTMLFormElement).name]: (e.target as HTMLInputElement)
+              .value,
+          })
+        }
+        onSubmit={e => {
+          e.preventDefault()
+          login()
+        }}
+      >
+        <SimpleGrid columns={1} spacing="1rem">
+          <img className={classes.img} src={logo} alt="InTouch Logo" />
+          <FormControl>
+            <Input
+              name="email"
+              type="email"
+              placeholder="Email"
+              defaultValue={form.email}
+              focusBorderColor="blue.400"
+            />
+          </FormControl>
+          <FormControl>
+            <Input
+              name="password"
+              type="password"
+              placeholder="Password"
+              defaultValue={form.password}
+              focusBorderColor="blue.400"
+            />
+          </FormControl>
+          <Button
+            type="submit"
+            variantColor="blue"
+            variant="solid"
+            isDisabled={!form.valid}
+          >
+            Log In
+          </Button>
+          <Link
+            className={classes.link}
+            onClick={(e: React.FormEvent<HTMLAnchorElement>) => {
+              e.preventDefault()
+              setError(null)
+              deleteSuccessMessage()
+              history.push('/auth/signup')
+            }}
+          >
+            Sign Up
+          </Link>
+        </SimpleGrid>
+      </form>
+    )
+  }
+
   return (
     <form
       className={classes.form}
-      onChange={e =>
+      onChange={(e: FormEvent<HTMLFormElement>) =>
         updateLoginForm({
           ...form,
-          [(e.target as any).name]: (e.target as any).value,
+          [(e.target as HTMLFormElement).name]: (e.target as HTMLInputElement)
+            .value,
         })
       }
       onSubmit={e => {
@@ -101,7 +149,7 @@ const Login: React.FC<LoginProps> = ({
         login()
       }}
     >
-      <SimpleGrid columns={1} spacing="1rem">
+      <SimpleGrid columns={1} spacing="1rem" width="320px" margin="0 auto">
         <img className={classes.img} src={logo} alt="InTouch Logo" />
         <FormControl>
           <Input

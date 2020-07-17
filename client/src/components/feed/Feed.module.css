@@ -12,14 +12,32 @@
   background-color: #fff;
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
   height: 4rem;
   margin-bottom: 0.5rem;
+  padding: 1rem;
 }
 
 .link {
+  margin-left: 2rem;
   background-color: #eee;
-  height: 70%;
-  padding: 0.5rem 3rem 0.5rem 1rem;
+  height: 3rem;
+  padding: 0.5rem 1rem;
   border-radius: 10px;
+  width: 100%;
+}
+
+.desk {
+  margin: 0 auto;
+  width: 320px;
+  padding-top: 2.5rem;
+}
+
+.feedDesk {
+  background-color: #eee;
+}
+
+.containerDesk {
+  background-color: #eee;
+  padding-bottom: 0.5rem;
 }

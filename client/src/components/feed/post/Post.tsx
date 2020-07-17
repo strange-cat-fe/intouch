@@ -3,18 +3,8 @@ import classes from './Post.module.css'
 import { Avatar, Image, Divider } from '@chakra-ui/core'
 import { MdFavoriteBorder as LikeIcon } from 'react-icons/md'
 import { MdFavorite as LikeActiveIcon } from 'react-icons/md'
-import { Post } from '../../../types/feed'
-import { ThunkAction } from 'redux-thunk'
-import { AppState } from '../../../store'
-import { Action } from 'redux'
 import { NavLink } from 'react-router-dom'
-
-export interface PostProps extends Post {
-  userId: string
-  setLike: (
-    postId: string,
-  ) => ThunkAction<void, AppState, unknown, Action<string>>
-}
+import { PostProps } from '../../../containers/post/PostContainer'
 
 const PostComponent: React.FC<PostProps> = ({
   author,

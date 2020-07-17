@@ -7,8 +7,8 @@ import {
   LOGIN,
   SET_USER,
   DELETE_SUCCESS_MESSAGE,
+  LOG_OUT,
 } from '../constants/auth'
-import { Post } from './feed'
 
 export interface AuthState {
   signup: {
@@ -25,7 +25,12 @@ export interface AuthState {
   }
   error: string | null
   loading: boolean
-  user: null | { username: string; userId: string }
+  user: null | {
+    username: string
+    userId: string
+    img: string
+    theme: 'light' | 'dark'
+  }
 }
 
 export interface UpdateSignUpFormAction {
@@ -76,7 +81,13 @@ export interface SetUserAction {
   payload: {
     username: string
     userId: string
+    img: string
+    theme: 'light' | 'dark'
   }
+}
+
+export interface LogOutAction {
+  type: typeof LOG_OUT
 }
 
 export type AuthActions =
@@ -87,3 +98,4 @@ export type AuthActions =
   | LoginAction
   | SetUserAction
   | DeleteSuccessMessageAction
+  | LogOutAction

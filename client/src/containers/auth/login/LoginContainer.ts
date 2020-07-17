@@ -1,4 +1,4 @@
-import { connect } from 'react-redux'
+import { connect, ConnectedProps } from 'react-redux'
 import Login from '../../../components/auth/login/Login'
 import { SetErrorAction, DeleteSuccessMessageAction } from '../../../types/auth'
 import { AppState } from '../../../store'
@@ -48,5 +48,8 @@ const mapDispatchToProps: LinkDispatchToProps = {
   deleteSuccessMessage,
 }
 
-// TODO: fix typecheking error
-export default connect(mapStateToProps, mapDispatchToProps)(Login as any)
+const connector = connect(mapStateToProps, mapDispatchToProps)
+
+export type LoginProps = ConnectedProps<typeof connector>
+
+export default connector(Login)

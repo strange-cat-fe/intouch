@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, FormEvent, useState } from 'react'
 import classes from './SignUp.module.css'
 import logo from '../../../logo.png'
 import {
@@ -11,33 +11,10 @@ import {
   Link,
   useToast,
 } from '@chakra-ui/core'
-import { SetErrorAction } from '../../../types/auth'
-import { ThunkAction } from 'redux-thunk'
-import { AppState } from '../../../store'
-import { Action } from 'redux'
 import { withRouter, RouteComponentProps, Redirect } from 'react-router-dom'
+import { SignUpProps } from '../../../containers/auth/signup/SignUpContainer'
 
-interface SignUpProps extends RouteComponentProps {
-  form: {
-    email: string
-    username: string
-    password: string
-    valid: boolean
-    success: string | null
-  }
-  loading: boolean
-  error: string | null
-  updateSignUpForm: (form: {
-    email: string
-    username: string
-    password: string
-    valid: boolean
-  }) => ThunkAction<void, AppState, unknown, Action<string>>
-  signUp: () => ThunkAction<void, AppState, unknown, Action<string>>
-  setError: (error: string | null) => SetErrorAction
-}
-
-const SignUp: React.FC<SignUpProps> = ({
+const SignUp: React.FC<SignUpProps & RouteComponentProps> = ({
   form,
   loading,
   error,
@@ -47,8 +24,14 @@ const SignUp: React.FC<SignUpProps> = ({
   history,
 }) => {
   const toast = useToast()
+  const [width, setWidth] = useState(0)
 
-  useEffect((): any => {
+  const updateWidth = () => setWidth(window.innerWidth)
+
+  useEffect(() => {
+    updateWidth()
+    window.addEventListener('resize', updateWidth)
+
     error &&
       toast({
         title: 'Error',
@@ -59,7 +42,10 @@ const SignUp: React.FC<SignUpProps> = ({
         onClose: () => setError(null),
       })
 
-    return () => setError(null)
+    return () => {
+      window.removeEventListener('resize', updateWidth)
+      setError(null)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error])
 
@@ -76,13 +62,96 @@ const SignUp: React.FC<SignUpProps> = ({
       </div>
     )
   }
+
+  if (width <= 768) {
+    return (
+      <form
+        className={classes.form}
+        onChange={(e: FormEvent<HTMLFormElement>) =>
+          updateSignUpForm({
+            ...form,
+            [(e.target as HTMLFormElement).name]: (e.target as HTMLInputElement)
+              .value,
+          })
+        }
+        onSubmit={e => {
+          e.preventDefault()
+          signUp()
+        }}
+      >
+        <SimpleGrid columns={1} spacing="1rem">
+          <img className={classes.img} src={logo} alt="InTouch Logo" />
+          <FormControl>
+            <Input
+              name="email"
+              type="email"
+              placeholder="Email"
+              defaultValue={form.email}
+              aria-describedby="email-helper-text"
+              focusBorderColor="blue.400"
+            />
+            <FormHelperText id="email-helper-text">
+              Make sure to provie real E-mail
+            </FormHelperText>
+          </FormControl>
+          <FormControl>
+            <Input
+              name="username"
+              type="text"
+              placeholder="Username"
+              defaultValue={form.username}
+              aria-describedby="username-helper-text"
+              focusBorderColor="blue.400"
+            />
+            <FormHelperText id="username-helper-text">
+              At least 4 characters
+            </FormHelperText>
+          </FormControl>
+          <FormControl>
+            <Input
+              name="password"
+              type="password"
+              placeholder="Password"
+              defaultValue={form.password}
+              aria-describedby="password-helper-text"
+              focusBorderColor="blue.400"
+            />
+            <FormHelperText id="password-helper-text">
+              Combination of 8 characters
+            </FormHelperText>
+          </FormControl>
+          <Button
+            type="submit"
+            variantColor="blue"
+            variant="solid"
+            isDisabled={!form.valid}
+          >
+            Sign Up
+          </Button>
+          <Link
+            className={classes.link}
+            onClick={(e: React.FormEvent<HTMLAnchorElement>) => {
+              e.preventDefault()
+              setError(null)
+              history.push('/auth/login')
+            }}
+          >
+            Already have an account?
+          </Link>
+        </SimpleGrid>
+        {form.success && <Redirect to="/auth/login" />}
+      </form>
+    )
+  }
+
   return (
     <form
       className={classes.form}
-      onChange={e =>
+      onChange={(e: FormEvent<HTMLFormElement>) =>
         updateSignUpForm({
           ...form,
-          [(e.target as any).name]: (e.target as any).value,
+          [(e.target as HTMLFormElement).name]: (e.target as HTMLInputElement)
+            .value,
         })
       }
       onSubmit={e => {
@@ -90,7 +159,7 @@ const SignUp: React.FC<SignUpProps> = ({
         signUp()
       }}
     >
-      <SimpleGrid columns={1} spacing="1rem">
+      <SimpleGrid columns={1} spacing="1rem" width="320px" margin="0 auto">
         <img className={classes.img} src={logo} alt="InTouch Logo" />
         <FormControl>
           <Input

@@ -1,4 +1,4 @@
-import { connect } from 'react-redux'
+import { connect, ConnectedProps } from 'react-redux'
 import Profile from '../../components/profile/Profile'
 import { Post } from '../../types/feed'
 import { ThunkAction } from 'redux-thunk'
@@ -9,6 +9,7 @@ import { setPosts } from '../../actions/feed'
 
 interface LinkStateToProps {
   username: string | null
+  img: string | null
   loading: boolean
   posts: Post[] | []
   currentUser: string
@@ -24,6 +25,7 @@ interface LinkDispatchToProps {
 const mapStateToProps = (state: AppState): LinkStateToProps => {
   return {
     username: state.profile.username,
+    img: state.profile.img,
     loading: state.feed.loading,
     posts: state.feed.posts,
     currentUser: state.auth.user!.username,
@@ -35,4 +37,8 @@ const mapDispatchToProps: LinkDispatchToProps = {
   setPosts,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Profile as any)
+const connector = connect(mapStateToProps, mapDispatchToProps)
+
+export type ProfileProps = ConnectedProps<typeof connector>
+
+export default connector(Profile)

@@ -23,3 +23,31 @@
 .active {
   color: #4299e1;
 }
+
+.menuDesk {
+  position: fixed;
+  top: 2.5rem;
+  left: 1rem;
+  width: 12.5rem;
+  height: 4rem;
+  background-color: #fff;
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 1rem;
+}
+
+.linkDesk:hover {
+  color: #4299e1;
+}
+
+.linkDesk:focus,
+.linkDesk:active {
+  outline: none;
+}
+
+.linkDeskActive {
+  color: #4299e1;
+}

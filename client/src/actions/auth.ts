@@ -12,6 +12,7 @@ import {
   SET_USER,
   LOGIN,
   DELETE_SUCCESS_MESSAGE,
+  LOG_OUT,
 } from '../constants/auth'
 import { ThunkAction } from 'redux-thunk'
 import { AppState } from '../store'
@@ -226,4 +227,25 @@ export const deleteSuccessMessage = (): DeleteSuccessMessageAction => {
   return {
     type: DELETE_SUCCESS_MESSAGE,
   }
+}
+
+export const logOut = (): ThunkAction<
+  void,
+  AppState,
+  unknown,
+  Action<string>
+> => dispatch => {
+  dispatch(setLoading(true))
+
+  const date = new Date()
+  date.setTime(date.getTime() + 24 * 60 * 60 * 1000 * -1)
+  document.cookie = 'refreshToken=;expires=' + date + 'path=/'
+
+  sessionStorage.clear()
+
+  dispatch({
+    type: LOG_OUT,
+  })
+
+  dispatch(setLoading(false))
 }

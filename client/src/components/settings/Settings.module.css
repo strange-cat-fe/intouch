@@ -1,0 +1,45 @@
+.settings {
+  background-color: #eee;
+  height: 100vh;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.link:hover {
+  color: #4299e1;
+}
+
+.theme {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fff;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.language {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fff;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.text {
+  margin-right: 6rem;
+}
+
+.container {
+  background-color: #eee;
+  margin: 0 auto;
+  width: 320px;
+  padding-top: 2.5rem;
+}

@@ -3,6 +3,7 @@ import { SET_PROFILE_INFO } from '../constants/profile'
 
 export interface ProfileState {
   username: string | null
+  img: string | null
   posts: Post[] | []
 }
 

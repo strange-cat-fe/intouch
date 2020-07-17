@@ -1,4 +1,4 @@
-import { connect } from 'react-redux'
+import { connect, ConnectedProps } from 'react-redux'
 import App from '../../components/app/App'
 import { Action } from 'redux'
 import { AppState } from '../../store'
@@ -28,5 +28,8 @@ const mapDispatchToProps: LinkDispatchToProps = {
   setUser,
 }
 
-// TODO: fix typechecking error
-export default connect(mapStateToProps, mapDispatchToProps)(App as any)
+const connector = connect(mapStateToProps, mapDispatchToProps)
+
+export type AppProps = ConnectedProps<typeof connector>
+
+export default connector(App)

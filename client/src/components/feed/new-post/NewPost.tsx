@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import classes from './NewPost.module.css'
 import Header from '../../header/Header'
 import {
@@ -9,41 +9,41 @@ import {
   Image,
   Progress,
 } from '@chakra-ui/core'
-import { UpdateFormAction } from '../../../types/feed'
-import { ThunkAction } from 'redux-thunk'
-import { AppState } from '../../../store'
-import { Action } from 'redux'
 import { withRouter, RouteComponentProps } from 'react-router-dom'
+import { NewPostProps } from '../../../containers/new-post/NewPostContainer'
+import AppMenu from '../../app-menu/AppMenu'
 
-interface NewPostProps extends RouteComponentProps {
-  form: {
-    text: string
-    img: string
-    valid: boolean
-  }
-  updateForm: (form: { text: string; img: string }) => UpdateFormAction
-  addPost: () => ThunkAction<void, AppState, unknown, Action<string>>
-}
-
-const NewPost: React.FC<NewPostProps> = ({
+const NewPost: React.FC<NewPostProps & RouteComponentProps> = ({
   form,
   history,
   updateForm,
   addPost,
 }) => {
-  const [loading, setLoading] = React.useState(false)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  React.useEffect((): any => () => updateForm({ text: '', img: '' }), [])
+  const [loading, setLoading] = useState(false)
+  const [width, setWidth] = useState(0)
 
-  const handleImgChange = async (e: any) => {
+  const updateWidth = () => setWidth(window.innerWidth)
+
+  useEffect(() => {
+    updateWidth()
+    window.addEventListener('resize', updateWidth)
+
+    return () => {
+      window.removeEventListener('resize', updateWidth)
+      updateForm({ text: '', img: '' })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const handleImgChange = async (e: ChangeEvent<HTMLInputElement>) => {
     setLoading(true)
 
-    const [img] = e.target.files
+    const img = (e.target as HTMLInputElement).files!
     const formData = new FormData()
-    formData.append('photo', img)
+    formData.append('photo', img[0])
 
     const response = await fetch(
-      `http://localhost:5000/api/upload/postPhoto?token=${JSON.parse(
+      `http://localhost:5000/api/upload/singleImage?token=${JSON.parse(
         sessionStorage.getItem('accessToken')!,
       )}`,
       {
@@ -59,6 +59,63 @@ const NewPost: React.FC<NewPostProps> = ({
     setLoading(false)
   }
 
+  if (width <= 768) {
+    return (
+      <div>
+        <Header title="New Post" link />
+        <form
+          className={classes.form}
+          onSubmit={e => {
+            e.preventDefault()
+            addPost()
+            history.push('/feed')
+          }}
+        >
+          <SimpleGrid columns={1} spacing="1rem">
+            {loading && <Progress hasStripe isAnimated value={100} />}
+            {form.img && <Image src={form.img} />}
+            <FormControl>
+              <Textarea
+                defaultValue={form.text}
+                name="text"
+                placeholder="Write new post here..."
+                resize="none"
+                height="200px"
+                onChange={(e: ChangeEvent) =>
+                  updateForm({
+                    ...form,
+                    text: (e.target as HTMLTextAreaElement).value,
+                  })
+                }
+              />
+            </FormControl>
+            <div className={classes.buttons}>
+              <div>
+                <label className={classes.imgBtn} htmlFor="new-post-img">
+                  Choose image
+                </label>
+                <input
+                  onChange={handleImgChange}
+                  className={classes.imgInput}
+                  id="new-post-img"
+                  type="file"
+                  accept="image/x-png,image/gif,image/jpeg"
+                />
+              </div>
+              <Button
+                type="submit"
+                variantColor="blue"
+                isDisabled={!form.valid}
+              >
+                Add Post
+              </Button>
+            </div>
+          </SimpleGrid>
+        </form>
+      </div>
+    )
+  }
+
   return (
     <div className={classes.newPost}>
       <Header title="New Post" link />
@@ -70,7 +127,13 @@ const NewPost: React.FC<NewPostProps> = ({
           history.push('/feed')
         }}
       >
-        <SimpleGrid columns={1} spacing="1rem">
+        <SimpleGrid
+          columns={1}
+          spacing="1rem"
+          width="320px"
+          margin="0 auto"
+          paddingTop="2.5rem"
+        >
           {loading && <Progress hasStripe isAnimated value={100} />}
           {form.img && <Image src={form.img} />}
           <FormControl>
@@ -80,8 +143,11 @@ const NewPost: React.FC<NewPostProps> = ({
               placeholder="Write new post here..."
               resize="none"
               height="200px"
-              onChange={(e: any) =>
-                updateForm({ ...form, text: e.target.value })
+              onChange={(e: ChangeEvent) =>
+                updateForm({
+                  ...form,
+                  text: (e.target as HTMLTextAreaElement).value,
+                })
               }
             />
           </FormControl>
@@ -95,6 +161,7 @@ const NewPost: React.FC<NewPostProps> = ({
                 className={classes.imgInput}
                 id="new-post-img"
                 type="file"
+                accept="image/x-png,image/gif,image/jpeg"
               />
             </div>
             <Button type="submit" variantColor="blue" isDisabled={!form.valid}>
@@ -103,6 +170,7 @@ const NewPost: React.FC<NewPostProps> = ({
           </div>
         </SimpleGrid>
       </form>
+      <AppMenu />
     </div>
   )
 }
