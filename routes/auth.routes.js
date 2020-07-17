@@ -9,9 +9,12 @@ const router = Router()
 
 const User = require('../models/User')
 const UVUser = require('../models/UVUser')
+const Subscription = require('../models/Subscription')
 const regEmail = require('../email/registration')
 
 sendgrid.setApiKey(config.get('sendgridApi'))
+
+const getFollowing = async user => await Subscription.find({ subscriber: user })
 
 router.post('/signup', async (req, res) => {
   try {
@@ -131,12 +134,14 @@ router.post('/accessToken', async (req, res) => {
       })
 
       if (user) {
+        const following = await getFollowing(user)
         const accessToken = jwt.sign(
           {
             userId: user._id,
             username: user.username,
             img: user.img,
             theme: user.theme,
+            following,
           },
           config.get('jwtSecret'),
           {
