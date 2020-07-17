@@ -14,7 +14,10 @@ const regEmail = require('../email/registration')
 
 sendgrid.setApiKey(config.get('sendgridApi'))
 
-const getFollowing = async user => await Subscription.find({ subscriber: user })
+const getFollowing = async ({ username, _id }) =>
+  (await Subscription.find({ subscriber: { username, _id } })).map(s => ({
+    ...s.profile,
+  }))
 
 router.post('/signup', async (req, res) => {
   try {
