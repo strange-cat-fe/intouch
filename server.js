@@ -22,6 +22,7 @@ app.use('/api/auth', require('./routes/auth.routes'))
 app.use('/api/posts', require('./routes/posts.routes'))
 app.use('/api/upload', require('./routes/upload.routes'))
 app.use('/api/profile', require('./routes/profile.routes'))
+app.use('/api/subscribe', require('./routes/subscription.routes'))
 
 async function start() {
   try {
