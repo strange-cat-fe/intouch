@@ -23,7 +23,7 @@ router.post('/new', async (req, res) => {
       text,
       date,
       img,
-      author: { username, _id: res.user._id },
+      author: { username, _id: res.user._id, img: res.user.img },
     })
 
     await newPost.save()

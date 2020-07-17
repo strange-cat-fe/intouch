@@ -13,6 +13,7 @@ const post = new Schema({
     type: {
       username: String,
       _id: String,
+      img: String,
     },
     required: true,
   },
