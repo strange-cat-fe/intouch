@@ -1,10 +1,20 @@
 const { Router } = require('express')
 
 const User = require('../models/User')
-const Post = require('../models/Post')
-const paginatedResults = require('../middleware/pagination')
+const Subscription = require('../models/Subscription')
 
 const router = Router()
+
+const mapFollowing = subscriptions => {
+  return subscriptions.map(s => ({
+    ...s.profile,
+  }))
+}
+const mapFollowers = subscriptions => {
+  return subscriptions.map(s => ({
+    ...s.subscriber,
+  }))
+}
 
 router.post('/changeAvatar', async (req, res) => {
   try {
@@ -21,12 +31,20 @@ router.post('/changeAvatar', async (req, res) => {
 
 router.get('/:username/info', async (req, res) => {
   try {
-    const user = await User.findOne({ username: req.params.username })
+    const { username, _id } = await User.findOne({
+      username: req.params.username,
+    })
+    const profile = { username, _id }
+
+    const followers = await Subscription.find({ profile })
+    const following = await Subscription.find({ subscriber: profile })
 
     res.status(200).json({
       data: {
-        username: user.username,
-        img: user.img,
+        username: profile.username,
+        img: profile.img,
+        following: mapFollowing(following),
+        followers: mapFollowers(followers),
       },
     })
   } catch (e) {
