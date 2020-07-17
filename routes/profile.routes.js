@@ -31,7 +31,7 @@ router.post('/changeAvatar', async (req, res) => {
 
 router.get('/:username/info', async (req, res) => {
   try {
-    const { username, _id } = await User.findOne({
+    const { username, _id, img } = await User.findOne({
       username: req.params.username,
     })
     const profile = { username, _id }
@@ -42,7 +42,7 @@ router.get('/:username/info', async (req, res) => {
     res.status(200).json({
       data: {
         username: profile.username,
-        img: profile.img,
+        img,
         following: mapFollowing(following),
         followers: mapFollowers(followers),
       },
