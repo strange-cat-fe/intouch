@@ -55,3 +55,16 @@
 .btn:active {
   outline: none;
 }
+
+.commentsBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.comment {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+}

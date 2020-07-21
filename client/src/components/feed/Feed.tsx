@@ -25,6 +25,15 @@ const Feed: React.FC<FeedProps> = ({ posts, loading, user, setPosts }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // eslint-disable-next-line
+  const filteredPosts = posts.filter(p => {
+    for (let i = 0; i < user.following.length; i++) {
+      if (p.author._id === user.following[i]._id) {
+        return p
+      }
+    }
+  })
+
   if (width <= 768) {
     return (
       <div className={classes.feed}>
@@ -36,7 +45,7 @@ const Feed: React.FC<FeedProps> = ({ posts, loading, user, setPosts }) => {
           </NavLink>
         </div>
         <div className={classes.container}>
-          {(posts as Post[]).map((p: Post, i: number) => {
+          {(filteredPosts as Post[]).map((p: Post, i: number) => {
             if (i === posts.length - 1) {
               return (
                 <React.Fragment key={p._id}>
@@ -48,6 +57,11 @@ const Feed: React.FC<FeedProps> = ({ posts, loading, user, setPosts }) => {
               return <PostContainer {...p} key={p._id} />
             }
           })}
+          {filteredPosts.length === 0 && (
+            <div className={classes.placeholder}>
+              No posts yet <br /> follow other users <br /> to see their posts
+            </div>
+          )}
         </div>
         {loading && <Progress isAnimated hasStripe value={100} />}
         <AppMenu />
@@ -66,7 +80,7 @@ const Feed: React.FC<FeedProps> = ({ posts, loading, user, setPosts }) => {
           </NavLink>
         </div>
         <div className={classes.containerDesk}>
-          {(posts as Post[]).map((p: Post, i: number) => {
+          {(filteredPosts as Post[]).map((p: Post, i: number) => {
             if (i === posts.length - 1) {
               return (
                 <React.Fragment key={p._id}>
@@ -78,6 +92,11 @@ const Feed: React.FC<FeedProps> = ({ posts, loading, user, setPosts }) => {
               return <PostContainer {...p} key={p._id} />
             }
           })}
+          {filteredPosts.length === 0 && (
+            <div className={classes.placeholder}>
+              No posts yet <br /> follow other users <br /> to see their posts
+            </div>
+          )}
         </div>
         {loading && <Progress isAnimated hasStripe value={100} />}
       </div>

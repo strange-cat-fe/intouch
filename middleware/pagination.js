@@ -1,7 +1,7 @@
 module.exports = model => {
   return async (req, res, next) => {
     let filter = {}
-    if (req.params.username) filter = { 'author.username': req.params.username }
+    if (req.params.username) filter = {}
 
     const page = parseInt(req.query.page)
     const limit = 5

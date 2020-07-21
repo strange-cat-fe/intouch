@@ -7,6 +7,7 @@ import NewPostContainer from '../../containers/new-post/NewPostContainer'
 import ProfileContainer from '../../containers/profile/ProfileContainer'
 import { AppProps } from '../../containers/app/AppContainer'
 import SettingsContainer from '../../containers/settings/SettingsContainer'
+import ChangeAvatar from '../profile/changeAvatar/ChangeAvatar'
 
 const App: React.FC<AppProps> = ({ user, setUser }) => {
   useEffect(() => {
@@ -20,7 +21,8 @@ const App: React.FC<AppProps> = ({ user, setUser }) => {
         <Route path="/feed" exact component={FeedContainer} />
         <Route path="/feed/new" component={NewPostContainer} />
         <Route path="/profile/:username?" component={ProfileContainer} />
-        <Route path="/settings" component={SettingsContainer} />
+        <Route path="/settings" exact component={SettingsContainer} />
+        <Route path="/settings/avatar" component={ChangeAvatar} />
         <Redirect to="/feed" />
       </Router>
     )

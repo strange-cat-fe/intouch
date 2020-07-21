@@ -68,3 +68,12 @@
   background-color: #eee;
   padding-bottom: 0.5rem;
 }
+
+.meta {
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-bottom: 0.5rem;
+  padding: 1rem;
+}

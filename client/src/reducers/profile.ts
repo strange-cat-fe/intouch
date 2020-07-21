@@ -9,6 +9,8 @@ const initialState: ProfileState = {
   username: null,
   img: null,
   posts: [],
+  following: [],
+  followers: [],
 }
 
 export default (

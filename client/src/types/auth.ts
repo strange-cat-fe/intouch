@@ -30,6 +30,10 @@ export interface AuthState {
     userId: string
     img: string
     theme: 'light' | 'dark'
+    following: Array<{
+      username: string
+      _id: string
+    }>
   }
 }
 
@@ -83,6 +87,10 @@ export interface SetUserAction {
     userId: string
     img: string
     theme: 'light' | 'dark'
+    following: Array<{
+      username: string
+      _id: string
+    }>
   }
 }
 

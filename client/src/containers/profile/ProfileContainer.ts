@@ -13,6 +13,14 @@ interface LinkStateToProps {
   loading: boolean
   posts: Post[] | []
   currentUser: string
+  followers: Array<{
+    username: string
+    _id: string
+  }>
+  following: Array<{
+    username: string
+    _id: string
+  }>
 }
 
 interface LinkDispatchToProps {
@@ -29,6 +37,8 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
     loading: state.feed.loading,
     posts: state.feed.posts,
     currentUser: state.auth.user!.username,
+    followers: state.profile.followers,
+    following: state.profile.following,
   }
 }
 

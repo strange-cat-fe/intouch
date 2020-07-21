@@ -22,6 +22,8 @@ const Profile: React.FC<ProfileProps & RouteComponentProps<Params>> = ({
   currentUser,
   setProfileInfo,
   setPosts,
+  followers,
+  following,
 }) => {
   const [width, setWidth] = useState(0)
 
@@ -55,6 +57,10 @@ const Profile: React.FC<ProfileProps & RouteComponentProps<Params>> = ({
         <div className={classes.info}>
           {username && <Avatar name={username} src={img!} />}
           <div className={classes.username}>{username}</div>
+        </div>
+        <div className={classes.meta}>
+          <div>Following: {following.length}</div>
+          <div>Followers: {followers.length}</div>
         </div>
         {match.params.username === currentUser ||
           (!match.params.username && (

@@ -23,6 +23,7 @@ export interface Post {
   author: {
     username: string
     _id: string
+    img: string
   }
   date: string
   _id: string
@@ -30,6 +31,13 @@ export interface Post {
   img: string
   likes: string[]
   __v: number
+  comments: Array<{
+    author: { username: string; _id: string; img: string }
+    date: string
+    _id: string
+    text: string
+    __v: number
+  }>
 }
 
 export interface SetLoadingAction {

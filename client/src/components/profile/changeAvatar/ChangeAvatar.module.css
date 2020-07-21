@@ -1,0 +1,16 @@
+.input {
+  display: none;
+}
+
+.imgBtn {
+  background-color: #3182ce;
+  color: #fff;
+  padding: 0.6rem 1rem;
+  border-radius: 7px;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}

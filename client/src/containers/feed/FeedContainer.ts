@@ -13,6 +13,10 @@ interface LinkStateToProps {
     userId: string
     username: string
     img: string
+    following: Array<{
+      username: string
+      _id: string
+    }>
   }
 }
 
@@ -28,6 +32,7 @@ const mapStateToProps = (state: AppState): LinkStateToProps => {
       userId: state.auth.user!.userId,
       username: state.auth.user!.username,
       img: state.auth.user!.img,
+      following: state.auth.user!.following,
     },
   }
 }
