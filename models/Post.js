@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose')
+const { schema } = require('./Comment')
 
 const post = new Schema({
   text: {
@@ -26,7 +27,20 @@ const post = new Schema({
     ],
     default: [],
   },
+  comments: {
+    type: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Comment',
+      },
+    ],
+  },
   date: String,
 })
+
+post.methods.getComments = async function () {
+  const comments = await this.comments.populate().execPopulate()
+  return comments
+}
 
 module.exports = model('Post', post)

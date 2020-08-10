@@ -1,11 +1,8 @@
 module.exports = model => {
   return async (req, res, next) => {
-    let filter = {}
-    if (req.params.username) filter = {}
-
     const page = parseInt(req.query.page)
     const limit = 5
-    const countElems = await model.find(filter).countDocuments().exec()
+    const countElems = await model.find().countDocuments().exec()
 
     const totalPages = Math.ceil(countElems / limit)
 
@@ -19,9 +16,10 @@ module.exports = model => {
 
     try {
       const elems = await model
-        .find(filter)
+        .find()
         .limit(endIndex - startIndex)
         .skip(startIndex)
+        .populate('comments')
         .exec()
 
       results.elems = elems.slice().reverse()
